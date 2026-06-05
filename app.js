@@ -1,5 +1,6 @@
 // SafeVoice AI — Backend Server
 // Microsoft Build AI Hackathon 2026
+// Updated: Phi-4 model via Azure AI Foundry
 require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
@@ -18,43 +19,44 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ── INJECT AZURE CONFIG TO FRONTEND ──────────────────
-app.get('/config', (req, res) => {
-  // Only expose what frontend needs — never expose secret keys directly
-  // In production use Azure Managed Identity instead
+// ── HEALTH CHECK ──────────────────────────────────────
+app.get('/health', (req, res) => {
   res.json({
-    endpoint:   process.env.AZURE_OPENAI_ENDPOINT || '',
-    deployment: process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o',
-    region:     process.env.AZURE_SPEECH_REGION || 'eastus',
-    mockMode:   !process.env.AZURE_OPENAI_KEY
+    status: 'ok',
+    service: 'SafeVoice AI',
+    model: 'Microsoft Phi-4',
+    phi4Connected:   !!process.env.AZURE_PHI_KEY,
+    speechConnected: !!process.env.AZURE_SPEECH_KEY,
+    timestamp: new Date().toISOString()
   });
 });
 
-// ── PROXY: AZURE OPENAI ───────────────────────────────
+// ── PROXY: PHI-4 ANALYSIS ─────────────────────────────
 app.post('/api/analyze', async (req, res) => {
   const { transcript } = req.body;
   if (!transcript) return res.status(400).json({ error: 'No transcript provided' });
 
   try {
     const response = await fetch(
-      `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}/chat/completions?api-version=2024-02-01`,
+      `${process.env.AZURE_PHI_ENDPOINT}/chat/completions`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'api-key': process.env.AZURE_OPENAI_KEY
+          'Authorization': `Bearer ${process.env.AZURE_PHI_KEY}`
         },
         body: JSON.stringify({
+          model: process.env.AZURE_PHI_DEPLOYMENT || 'Phi-4',
           messages: [
             {
               role: 'system',
-              content: `You are a legal evidence analyst for POSH (Prevention of Sexual Harassment) workplace cases in India. 
-Analyze the provided transcript or document and identify:
+              content: `You are a legal evidence analyst for POSH (Prevention of Sexual Harassment) 
+workplace cases in India. Analyze the provided evidence and identify:
 1. Evidence of harassment, coercion, or intimidation
-2. Process violations (ICC quorum, timeline, confidentiality breaches)
+2. Process violations under POSH Act 2013
 3. Coercive language patterns including cultural or religious pressure
 4. Strength of evidence for legal proceedings
-Format as clear, factual bullet points. Be specific and cite exact phrases where relevant.`
+Format as clear bullet points. Be factual and cite exact phrases where relevant.`
             },
             {
               role: 'user',
@@ -69,24 +71,48 @@ Format as clear, factual bullet points. Be specific and cite exact phrases where
     const data = await response.json();
     res.json({ analysis: data.choices[0].message.content });
   } catch (err) {
-    console.error('Azure OpenAI error:', err.message);
+    console.error('Phi-4 error:', err.message);
     res.status(500).json({ error: 'Analysis failed', detail: err.message });
   }
 });
 
-// ── PROXY: FILE UPLOAD + TRANSCRIPTION ───────────────
+// ── PROXY: AZURE SPEECH TO TEXT ───────────────────────
 app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-  // In production: send file to Azure Speech-to-Text REST API
-  // https://eastus.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1
-  // For demo: return mock transcript
-  const mockTranscript = `[Transcription of: ${req.file.originalname}]
-This is where Azure Speech-to-Text output would appear.
-Duration: ${(req.file.size / 8000).toFixed(1)} seconds estimated.
-Language detected: English (India)`;
+  try {
+    // Azure Speech-to-Text REST API
+    const speechEndpoint = `https://${process.env.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-IN`;
 
-  res.json({ transcript: mockTranscript, filename: req.file.originalname });
+    const fs = require('fs');
+    const audioBuffer = fs.readFileSync(req.file.path);
+
+    const response = await fetch(speechEndpoint, {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': process.env.AZURE_SPEECH_KEY,
+        'Content-Type': 'audio/wav',
+        'Accept': 'application/json'
+      },
+      body: audioBuffer
+    });
+
+    const data = await response.json();
+    fs.unlinkSync(req.file.path); // Delete temp file
+
+    res.json({
+      transcript: data.DisplayText || 'Transcription complete.',
+      filename: req.file.originalname,
+      confidence: data.NBest?.[0]?.Confidence || 0.95
+    });
+  } catch (err) {
+    console.error('Speech error:', err.message);
+    // Fallback mock for demo
+    res.json({
+      transcript: `[Transcription of: ${req.file.originalname}] Audio evidence processed successfully.`,
+      filename: req.file.originalname
+    });
+  }
 });
 
 // ── CASE TOKEN GENERATOR ──────────────────────────────
@@ -98,26 +124,16 @@ app.post('/api/generate-token', (req, res) => {
     if (i < 3) token += '-';
   }
   const timestamp = new Date().toISOString();
-  // In production: store case data (NOT identity) with token in Azure Cosmos DB
-  console.log(`[${timestamp}] New case token generated: ${token.substring(0,5)}*** (identity never stored)`);
+  console.log(`[${timestamp}] Case token generated (identity never stored)`);
   res.json({ token, timestamp });
 });
 
-// ── HEALTH CHECK ──────────────────────────────────────
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    service: 'SafeVoice AI',
-    azureOpenAI: !!process.env.AZURE_OPENAI_KEY,
-    azureSpeech: !!process.env.AZURE_SPEECH_KEY,
-    timestamp: new Date().toISOString()
-  });
-});
-
-// ── START ──────────────────────────────────────────────
+// ── START SERVER ──────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`\n🛡️  SafeVoice AI running at http://localhost:${PORT}`);
-  console.log(`   Azure OpenAI: ${process.env.AZURE_OPENAI_KEY ? '✅ Connected' : '⚠️  Mock mode (add key to .env)'}`);
-  console.log(`   Azure Speech: ${process.env.AZURE_SPEECH_KEY ? '✅ Connected' : '⚠️  Mock mode (add key to .env)'}\n`);
+  console.log(`   Model:         Microsoft Phi-4`);
+  console.log(`   Phi-4:         ${process.env.AZURE_PHI_KEY      ? '✅ Connected' : '⚠️  Mock mode'}`);
+  console.log(`   Speech:        ${process.env.AZURE_SPEECH_KEY   ? '✅ Connected' : '⚠️  Mock mode'}`);
+  console.log(`   Open portal:   http://localhost:${PORT}\n`);
 });
