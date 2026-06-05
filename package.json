@@ -1,0 +1,26 @@
+{
+  "name": "safevoice-ai",
+  "version": "1.0.0",
+  "description": "AI-powered POSH compliance and whistleblower protection platform — Microsoft Build AI Hackathon 2026",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "npx live-server --port=3000 --open=index.html"
+  },
+  "keywords": [
+    "azure-openai",
+    "posh-act",
+    "compliance",
+    "whistleblower",
+    "ai",
+    "hackathon"
+  ],
+  "author": "Siva Prasad Chilukuri",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "multer": "^1.4.5-lts.1"
+  }
+}

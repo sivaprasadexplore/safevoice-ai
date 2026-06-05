@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SafeVoice AI — When Silence is Not an Option</title>
+<style>
+  :root {
+    --teal:       #0B9E8A;
+    --teal-light: #13C4AD;
+    --navy:       #0D1B2A;
+    --navy-mid:   #1B2A3B;
+    --navy-card:  #162333;
+    --coral:      #E05A4B;
+    --gold:       #F5A623;
+    --white:      #FFFFFF;
+    --off-white:  #E8EEF4;
+    --muted:      #8FA8BF;
+    --text:       #C8D8E8;
+    --green:      #1A9A5A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy-mid);
+    border-bottom: 2px solid var(--teal);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  header .shield { font-size: 28px; }
+  header h1 { font-size: 22px; color: var(--white); font-weight: 700; }
+  header p  { font-size: 13px; color: var(--teal-light); font-style: italic; }
+  .header-badge {
+    margin-left: auto;
+    background: var(--teal);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── INTRO SCREEN ── */
+  .intro-hero {
+    background: var(--navy-card);
+    border: 1px solid rgba(11,158,138,0.3);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .intro-hero .big-icon { font-size: 56px; margin-bottom: 16px; }
+  .intro-hero h2 { font-size: 30px; color: var(--white); font-weight: 700; margin-bottom: 10px; }
+  .intro-hero p  { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 560px; margin: 0 auto 28px; }
+
+  .promise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .promise-card {
+    background: var(--navy-mid);
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .promise-card .icon { font-size: 28px; margin-bottom: 10px; }
+  .promise-card h4 { font-size: 14px; color: var(--white); font-weight: 600; margin-bottom: 6px; }
+  .promise-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--teal);
+    border: 1.5px solid var(--teal);
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(11,158,138,0.1); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: var(--navy-mid);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .step-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .step-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--navy-mid);
+    border: 1.5px solid var(--muted);
+    transition: all 0.3s;
+  }
+  .step-dot.done   { background: var(--teal); border-color: var(--teal); }
+  .step-dot.active { background: var(--teal-light); border-color: var(--teal-light); transform: scale(1.3); }
+
+  /* ── CHAT CARD ── */
+  .chat-card {
+    background: var(--navy-card);
+    border: 1px solid rgba(11,158,138,0.25);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .ai-bubble {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .ai-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .ai-message {
+    background: var(--navy-mid);
+    border-radius: 0 12px 12px 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    color: var(--off-white);
+    line-height: 1.6;
+    flex: 1;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ai-message .step-tag {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* ── INPUT AREA ── */
+  .input-area { margin-top: 8px; }
+  .input-area textarea {
+    width: 100%;
+    background: var(--navy-mid);
+    border: 1.5px solid rgba(11,158,138,0.3);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 15px;
+    padding: 14px 16px;
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  .input-area textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .input-area textarea::placeholder { color: var(--muted); }
+  .input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    gap: 12px;
+  }
+  .char-hint { font-size: 12px; color: var(--muted); }
+
+  /* ── QUICK REPLIES ── */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .quick-reply {
+    background: var(--navy-mid);
+    border: 1px solid rgba(11,158,138,0.4);
+    color: var(--teal-light);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quick-reply:hover { background: rgba(11,158,138,0.15); border-color: var(--teal); }
+
+  /* ── UPLOAD SCREEN ── */
+  .upload-zone {
+    border: 2px dashed rgba(11,158,138,0.4);
+    border-radius: 12px;
+    padding: 48px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--navy-card);
+    margin-bottom: 20px;
+  }
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--teal);
+    background: rgba(11,158,138,0.05);
+  }
+  .upload-zone .upload-icon { font-size: 48px; margin-bottom: 16px; }
+  .upload-zone h3 { font-size: 18px; color: var(--white); margin-bottom: 8px; }
+  .upload-zone p  { font-size: 14px; color: var(--muted); }
+  .upload-zone input[type=file] { display: none; }
+
+  .file-types {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .file-type-badge {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+
+  .uploaded-file {
+    background: var(--navy-card);
+    border: 1px solid var(--teal);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .uploaded-file .file-icon { font-size: 28px; }
+  .uploaded-file .file-info h4 { font-size: 14px; color: var(--white); }
+  .uploaded-file .file-info p  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── TRANSCRIPTION BOX ── */
+  .transcription-box {
+    background: var(--navy-mid);
+    border: 1px solid rgba(11,158,138,0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .transcription-box .box-label {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .transcription-box .content {
+    font-size: 14px;
+    color: var(--off-white);
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  /* ── AI ANALYSIS BOX ── */
+  .analysis-box {
+    background: linear-gradient(135deg, rgba(11,158,138,0.08), rgba(13,27,42,0.9));
+    border: 1px solid rgba(11,158,138,0.4);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .analysis-box .analysis-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(11,158,138,0.2);
+  }
+  .analysis-box .analysis-header h3 { font-size: 16px; color: var(--teal-light); font-weight: 700; }
+  .analysis-box .finding {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .analysis-box .finding .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .analysis-box .finding p { font-size: 14px; color: var(--off-white); line-height: 1.6; }
+
+  /* ── TOKEN SCREEN ── */
+  .token-hero {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .token-hero .success-icon { font-size: 64px; margin-bottom: 20px; }
+  .token-hero h2 { font-size: 26px; color: var(--white); font-weight: 700; margin-bottom: 12px; }
+  .token-hero p  { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 480px; margin: 0 auto 28px; }
+
+  .token-box {
+    background: var(--navy-mid);
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 0 auto 28px;
+    max-width: 500px;
+  }
+  .token-box .token-label {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .token-box .token-value {
+    font-family: 'Courier New', monospace;
+    font-size: 22px;
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .token-box .token-note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .guarantee-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto 32px;
+  }
+  .guarantee-item {
+    background: var(--navy-card);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid rgba(255,255,255,0.06);
+    text-align: left;
+  }
+  .guarantee-item .g-icon { font-size: 20px; flex-shrink: 0; }
+  .guarantee-item p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── LOADING SPINNER ── */
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--teal-light);
+    font-size: 14px;
+    padding: 12px 0;
+  }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(11,158,138,0.2);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 22px;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert.info    { background: rgba(11,158,138,0.1);  border: 1px solid rgba(11,158,138,0.3);  color: var(--teal-light); }
+  .alert.warning { background: rgba(245,166,35,0.1);  border: 1px solid rgba(245,166,35,0.3);  color: var(--gold); }
+  .alert.success { background: rgba(26,154,90,0.1);   border: 1px solid rgba(26,154,90,0.3);   color: #4ADE80; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 60px;
+  }
+
+  /* ── COPY BTN ── */
+  .copy-btn {
+    background: var(--navy-mid);
+    border: 1px solid var(--teal);
+    color: var(--teal);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(11,158,138,0.2); }
+
+  @media (max-width: 600px) {
+    .promise-grid   { grid-template-columns: 1fr; }
+    .guarantee-grid { grid-template-columns: 1fr; }
+    .intro-hero, .chat-card { padding: 24px 20px; }
+    header { padding: 14px 16px; }
+    header h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shield">🛡️</div>
+  <div>
+    <h1>SafeVoice AI</h1>
+    <p>When Silence is Not an Option</p>
+  </div>
+  <div class="header-badge">ANONYMOUS &amp; SECURE</div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SCREEN 1: INTRO                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div id="screen-intro" class="screen active">
+  <div class="container">
+    <div class="intro-hero">
+      <div class="big-icon">🛡️</div>
+      <h2>You are safe here.</h2>
+      <p>No login required. No name asked. No identity stored. This is a protected space where you can report a workplace incident confidentially — at your own pace.</p>
+      <button class="btn-primary" onclick="startJourney()">I Want to Report an Incident →</button>
+    </div>
+
+    <div class="promise-grid">
+      <div class="promise-card">
+        <div class="icon">🔒</div>
+        <h4>Zero Identity</h4>
+        <p>We never ask for your name, email, or employee ID. Ever.</p>
+      </div>
+      <div class="promise-card">
+        <div class="icon">🤝</div>
+        <h4>Guided by AI</h4>
+        <p>A compassionate AI guides you — one gentle question at a time.</p>
+      </div>
+      <div class="promise-card">
+        <div class="icon">⚖️</div>
+        <h4>Legally Protected</h4>
+        <p>Your complaint is preserved with court-admissible chain of custody.</p>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span>ℹ️</span>
+      <span>This platform is compliant with the POSH Act 2013. Your complaint will be routed to an <strong>independent ICC member</strong> — not your HR department or management.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SCREEN 2: GUIDED INTAKE (5 QUESTIONS)               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div id="screen-intake" class="screen">
+  <div class="container">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="step-label">Step 1 of 5</span>
+        <span id="step-pct">20%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+      </div>
+      <div class="step-dots" id="step-dots"></div>
+    </div>
+
+    <div class="chat-card">
+      <div class="ai-bubble">
+        <div class="ai-avatar">🤖</div>
+        <div class="ai-message" id="ai-question">
+          <span class="step-tag" id="step-tag">STEP 1 OF 5</span>
+          <span id="question-text">Loading...</span>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <textarea id="user-answer" placeholder="Type your answer here... Take your time. There is no rush." rows="4"></textarea>
+        <div class="input-row">
+          <span class="char-hint">Your answer is stored only with your anonymous case token</span>
+          <button class="btn-primary" onclick="nextStep()" id="next-btn">Continue →</button>
+        </div>
+      </div>
+
+      <div class="quick-replies" id="quick-replies"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SCREEN 3: EVIDENCE UPLOAD                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div id="screen-upload" class="screen">
+  <div class="container">
+    <div class="section-label">STEP 6 OF 7</div>
+    <div class="section-title">Upload Evidence</div>
+    <div class="section-sub">Upload any supporting evidence — audio recordings, video, documents, screenshots, or messages. Our AI will analyze and summarize what each piece of evidence proves.</div>
+
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept="audio/*,video/*,.pdf,.doc,.docx,.png,.jpg,.jpeg" onchange="handleFileUpload(event)" />
+      <div class="upload-icon">📎</div>
+      <h3>Click to upload evidence</h3>
+      <p>Or drag and drop files here</p>
+      <div class="file-types">
+        <span class="file-type-badge">MP3</span>
+        <span class="file-type-badge">MP4</span>
+        <span class="file-type-badge">WAV</span>
+        <span class="file-type-badge">PDF</span>
+        <span class="file-type-badge">DOCX</span>
+        <span class="file-type-badge">JPG</span>
+        <span class="file-type-badge">PNG</span>
+      </div>
+    </div>
+
+    <div id="uploaded-files-list"></div>
+    <div id="transcription-area"></div>
+    <div id="analysis-area"></div>
+
+    <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
+      <button class="btn-secondary" onclick="skipEvidence()">Skip — I have no evidence to upload</button>
+      <button class="btn-primary" id="proceed-btn" onclick="proceedToToken()" style="display:none;">Generate My Case Token →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SCREEN 4: CASE TOKEN                                -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div id="screen-token" class="screen">
+  <div class="container">
+    <div class="alert success">
+      <span>✅</span>
+      <span><strong>Your complaint has been securely submitted.</strong> The ICC has been alerted anonymously. Retaliation monitoring has begun.</span>
+    </div>
+
+    <div class="token-hero">
+      <div class="success-icon">🔐</div>
+      <h2>Your Case Token</h2>
+      <p>This is the only connection between you and your case. Save it somewhere safe. Use it to check your case status at any time — without revealing your identity.</p>
+
+      <div class="token-box">
+        <div class="token-label">YOUR ANONYMOUS CASE TOKEN</div>
+        <div class="token-value" id="token-display">—</div>
+        <div class="token-note">Generated: <span id="token-date">—</span><br/>This token is mathematically unlinked from your identity.</div>
+        <br/>
+        <button class="copy-btn" onclick="copyToken()">📋 Copy Token</button>
+      </div>
+
+      <div class="guarantee-grid">
+        <div class="guarantee-item">
+          <div class="g-icon">🔒</div>
+          <p>Your identity is <strong>never stored</strong> in any system</p>
+        </div>
+        <div class="guarantee-item">
+          <div class="g-icon">⚖️</div>
+          <p>Evidence preserved with <strong>court-admissible</strong> chain of custody</p>
+        </div>
+        <div class="guarantee-item">
+          <div class="g-icon">👁️</div>
+          <p><strong>Retaliation monitoring</strong> has started automatically</p>
+        </div>
+        <div class="guarantee-item">
+          <div class="g-icon">🚨</div>
+          <p>ICC alerted to <strong>independent member</strong> only — not HR or management</p>
+        </div>
+      </div>
+
+      <div class="alert warning">
+        <span>⚠️</span>
+        <span>Write down or screenshot your case token. It cannot be recovered if lost — this protects your anonymity.</span>
+      </div>
+
+      <button class="btn-secondary" onclick="startNewReport()" style="margin-top:16px;">Start a New Report</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  SafeVoice AI — Microsoft Build AI Hackathon 2026 &nbsp;|&nbsp;
+  POSH Act 2013 Compliant &nbsp;|&nbsp;
+  Built with Azure OpenAI + Azure Speech-to-Text &nbsp;|&nbsp;
+  <strong style="color:var(--teal)">Zero identity stored</strong>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIGURATION — Replace with your Azure keys in .env
+// For demo: uses mock responses if no keys provided
+// ═══════════════════════════════════════════════════════
+const CONFIG = {
+  // These will be loaded from environment in production
+  // For hackathon demo: set these directly or use mock mode
+  AZURE_OPENAI_ENDPOINT: window.AZURE_OPENAI_ENDPOINT || '',
+  AZURE_OPENAI_KEY:      window.AZURE_OPENAI_KEY      || '',
+  AZURE_OPENAI_DEPLOY:   window.AZURE_OPENAI_DEPLOY   || 'gpt-4o',
+  MOCK_MODE: true  // Set to false when Azure keys are connected
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const state = {
+  currentStep: 0,
+  answers: [],
+  uploadedFiles: [],
+  caseToken: null,
+};
+
+// ═══════════════════════════════════════════════════════
+// INTAKE QUESTIONS
+// ═══════════════════════════════════════════════════════
+const QUESTIONS = [
+  {
+    step: "STEP 1 OF 5 — WHAT HAPPENED",
+    text: "I'm here to help you. Take your time.\n\nCan you tell me, in your own words, what happened? There is no wrong way to describe it.",
+    placeholder: "Describe what happened. You can be as brief or as detailed as you like...",
+    quickReplies: [
+      "I was harassed verbally",
+      "I experienced physical harassment",
+      "I received inappropriate messages",
+      "I was treated unfairly because of my gender"
+    ]
+  },
+  {
+    step: "STEP 2 OF 5 — WHEN DID IT HAPPEN",
+    text: "Thank you for sharing that. I want you to know this takes real courage.\n\nCan you tell me approximately when this happened? Even a rough timeframe is helpful.",
+    placeholder: "e.g. Last Tuesday, sometime in March 2026, about 3 months ago...",
+    quickReplies: [
+      "Within the last week",
+      "Within the last month",
+      "More than a month ago",
+      "It has happened multiple times"
+    ]
+  },
+  {
+    step: "STEP 3 OF 5 — WHERE IT HAPPENED",
+    text: "You're doing really well. Every detail helps.\n\nWhere did this incident take place?",
+    placeholder: "e.g. Office floor, meeting room, virtual call, company event, parking area...",
+    quickReplies: [
+      "In the office",
+      "In a meeting room",
+      "On a video/phone call",
+      "Outside office — company event"
+    ]
+  },
+  {
+    step: "STEP 4 OF 5 — WHO WAS INVOLVED",
+    text: "This information helps us understand the situation. You don't need to use names — a role or description is enough.\n\nWho was involved in this incident?",
+    placeholder: "e.g. My direct manager, a senior colleague, someone from another team. You don't need to name anyone.",
+    quickReplies: [
+      "My direct manager",
+      "A senior colleague",
+      "Someone from another team",
+      "A client or vendor"
+    ]
+  },
+  {
+    step: "STEP 5 OF 5 — IMPACT ON YOU",
+    text: "Almost done. You've been incredibly brave in sharing this.\n\nHow has this incident affected you? This helps us understand the severity and urgency.",
+    placeholder: "How are you feeling? Has it affected your work, mental health, or daily life?",
+    quickReplies: [
+      "I feel anxious coming to work",
+      "My work performance has suffered",
+      "I have been avoiding this person",
+      "I am afraid of retaliation"
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startJourney() {
+  state.currentStep = 0;
+  state.answers = [];
+  renderQuestion();
+  showScreen('screen-intake');
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.currentStep];
+  const total = QUESTIONS.length;
+
+  document.getElementById('step-label').textContent = `Step ${state.currentStep + 1} of ${total}`;
+  document.getElementById('step-pct').textContent   = `${Math.round(((state.currentStep+1)/total)*100)}%`;
+  document.getElementById('progress-fill').style.width = `${((state.currentStep+1)/total)*100}%`;
+  document.getElementById('step-tag').textContent   = q.step;
+  document.getElementById('question-text').textContent = q.text;
+  document.getElementById('user-answer').value      = '';
+  document.getElementById('user-answer').placeholder = q.placeholder;
+
+  // Dots
+  const dots = document.getElementById('step-dots');
+  dots.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+    dots.appendChild(d);
+  });
+
+  // Quick replies
+  const qr = document.getElementById('quick-replies');
+  qr.innerHTML = '';
+  q.quickReplies.forEach(r => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-reply';
+    btn.textContent = r;
+    btn.onclick = () => {
+      document.getElementById('user-answer').value = r;
+    };
+    qr.appendChild(btn);
+  });
+}
+
+function nextStep() {
+  const answer = document.getElementById('user-answer').value.trim();
+  if (!answer) {
+    document.getElementById('user-answer').style.borderColor = 'var(--coral)';
+    setTimeout(() => document.getElementById('user-answer').style.borderColor = '', 1500);
+    return;
+  }
+  state.answers.push({ question: QUESTIONS[state.currentStep].text, answer });
+  state.currentStep++;
+
+  if (state.currentStep < QUESTIONS.length) {
+    renderQuestion();
+  } else {
+    showScreen('screen-upload');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// FILE UPLOAD & TRANSCRIPTION
+// ═══════════════════════════════════════════════════════
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  state.uploadedFiles.push(file);
+
+  const list = document.getElementById('uploaded-files-list');
+  const fileDiv = document.createElement('div');
+  fileDiv.className = 'uploaded-file';
+  const isAudio = file.type.startsWith('audio/');
+  const isVideo = file.type.startsWith('video/');
+  const icon = isAudio ? '🎵' : isVideo ? '🎬' : file.type.includes('pdf') ? '📄' : '📎';
+  const sizeKB = (file.size / 1024).toFixed(1);
+  fileDiv.innerHTML = `
+    <div class="file-icon">${icon}</div>
+    <div class="file-info">
+      <h4>${file.name}</h4>
+      <p>${sizeKB} KB · ${file.type || 'Document'}</p>
+    </div>
+    <span style="margin-left:auto;color:var(--teal);font-size:13px;font-weight:600;">✓ Uploaded</span>
+  `;
+  list.appendChild(fileDiv);
+
+  if (isAudio || isVideo) {
+    transcribeAudio(file);
+  } else {
+    analyzeDocument(file);
+  }
+}
+
+async function transcribeAudio(file) {
+  const area = document.getElementById('transcription-area');
+  area.innerHTML = `
+    <div class="transcription-box">
+      <div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — TRANSCRIBING...</div>
+      <div class="loading"><div class="spinner"></div> Transcribing audio evidence in real time...</div>
+    </div>`;
+
+  await delay(2200);
+
+  // Mock transcription — replace with real Azure Speech SDK in production
+  const mockTranscript = CONFIG.MOCK_MODE
+    ? getMockTranscript()
+    : await callAzureSpeech(file);
+
+  area.innerHTML = `
+    <div class="transcription-box">
+      <div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — TRANSCRIPT</div>
+      <div class="content">${mockTranscript}</div>
+    </div>`;
+
+  await analyzeTranscript(mockTranscript);
+}
+
+async function analyzeDocument(file) {
+  await analyzeTranscript(`Document submitted: ${file.name}. Contents being analyzed for relevant evidence.`);
+}
+
+async function analyzeTranscript(transcript) {
+  const area = document.getElementById('analysis-area');
+  area.innerHTML = `
+    <div class="analysis-box">
+      <div class="analysis-header">
+        <span style="font-size:20px">🧠</span>
+        <h3>Azure OpenAI — Analyzing Evidence...</h3>
+      </div>
+      <div class="loading"><div class="spinner"></div> Identifying key evidence patterns and legal implications...</div>
+    </div>`;
+
+  await delay(2800);
+
+  const analysis = CONFIG.MOCK_MODE
+    ? getMockAnalysis()
+    : await callAzureOpenAI(transcript);
+
+  area.innerHTML = analysis;
+  document.getElementById('proceed-btn').style.display = 'inline-block';
+}
+
+// ═══════════════════════════════════════════════════════
+// AZURE API CALLS (Production — replace mock with these)
+// ═══════════════════════════════════════════════════════
+async function callAzureOpenAI(transcript) {
+  try {
+    const response = await fetch(`${CONFIG.AZURE_OPENAI_ENDPOINT}/openai/deployments/${CONFIG.AZURE_OPENAI_DEPLOY}/chat/completions?api-version=2024-02-01`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': CONFIG.AZURE_OPENAI_KEY
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: 'system', content: `You are a legal evidence analyst for workplace harassment cases. Analyze the provided transcript or document content and identify: 1) Key evidence of harassment or coercion, 2) Specific statements that prove misconduct, 3) Timeline of events, 4) Any coercive language patterns. Format your response as a structured analysis with clear findings. Be factual and specific.` },
+          { role: 'user', content: `Analyze this evidence from a POSH complaint case:\n\n${transcript}\n\nProvide a structured analysis of what this evidence proves.` }
+        ],
+        max_tokens: 600,
+        temperature: 0.3
+      })
+    });
+    const data = await response.json();
+    return renderAnalysisBox(data.choices[0].message.content);
+  } catch(e) {
+    return renderAnalysisBox('Evidence uploaded and secured. Manual review required.');
+  }
+}
+
+async function callAzureSpeech(file) {
+  // In production: use Azure Speech SDK or REST API
+  // https://docs.microsoft.com/azure/cognitive-services/speech-service/
+  return getMockTranscript();
+}
+
+// ═══════════════════════════════════════════════════════
+// MOCK DATA (For demo without Azure keys)
+// ═══════════════════════════════════════════════════════
+function getMockTranscript() {
+  return `[Azure Speech-to-Text — Demo Transcript]
+
+Speaker 1 (ICC Head): "Look, I need you to think about this carefully before you proceed. This kind of thing can really damage your reputation here. You have worked so hard to get where you are.
+
+You know in our culture we believe in forgiving and moving on. This is a small misunderstanding. Do you really want to destroy someone's career over this?
+
+I have spoken to him and he is deeply sorry. He has a family. Think about that. Sometimes it is better to just withdraw the complaint and move on with your work life."
+
+Speaker 2 (Complainant): "But he— what he did was not okay."
+
+Speaker 1: "I understand. But between us, these things happen in workplaces. You are a smart girl. You know how things work. Just think about your future here."
+
+[Recording ends — Duration: 4 minutes 12 seconds]`;
+}
+
+function getMockAnalysis() {
+  return `
+    <div class="analysis-box">
+      <div class="analysis-header">
+        <span style="font-size:20px">🧠</span>
+        <h3>Azure OpenAI — Evidence Analysis Complete</h3>
+      </div>
+      <div class="finding">
+        <div class="dot" style="background:var(--coral)"></div>
+        <p><strong>Coercion detected:</strong> ICC Head used career threat language — "this kind of thing can really damage your reputation" — a direct pressure tactic to discourage reporting.</p>
+      </div>
+      <div class="finding">
+        <div class="dot" style="background:var(--coral)"></div>
+        <p><strong>Religious/cultural coercion:</strong> Statement "in our culture we believe in forgiving and moving on" constitutes manipulation using cultural norms to silence the complainant.</p>
+      </div>
+      <div class="finding">
+        <div class="dot" style="background:var(--coral)"></div>
+        <p><strong>Process violation:</strong> ICC Head is attempting to influence the complainant directly — a fundamental breach of the POSH Act 2013 ICC independence requirements.</p>
+      </div>
+      <div class="finding">
+        <div class="dot" style="background:var(--gold)"></div>
+        <p><strong>Sympathy manipulation:</strong> Reference to the accused's family ("He has a family. Think about that.") is a documented coercion pattern designed to create guilt in the victim.</p>
+      </div>
+      <div class="finding">
+        <div class="dot" style="background:var(--teal)"></div>
+        <p><strong>Evidence strength:</strong> This audio recording constitutes strong evidence of ICC process tampering. Combined with the complaint timeline, this supports a formal escalation.</p>
+      </div>
+      <div style="margin-top:16px; padding:12px 16px; background:rgba(11,158,138,0.1); border-radius:8px; font-size:13px; color:var(--teal-light);">
+        ✅ Evidence secured with cryptographic hash. Chain of custody logged. Timestamp: ${new Date().toISOString()}
+      </div>
+    </div>`;
+}
+
+function renderAnalysisBox(text) {
+  const findings = text.split('\n').filter(l => l.trim());
+  const html = findings.map(f =>
+    `<div class="finding"><div class="dot"></div><p>${f}</p></div>`
+  ).join('');
+  return `<div class="analysis-box">
+    <div class="analysis-header">
+      <span style="font-size:20px">🧠</span>
+      <h3>Azure OpenAI — Evidence Analysis</h3>
+    </div>
+    ${html}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// TOKEN GENERATION
+// ═══════════════════════════════════════════════════════
+function generateToken() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let token = 'SV-';
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) token += chars[Math.floor(Math.random() * chars.length)];
+    if (i < 3) token += '-';
+  }
+  return token;
+}
+
+function proceedToToken() { showTokenScreen(); }
+function skipEvidence()   { showTokenScreen(); }
+
+function showTokenScreen() {
+  state.caseToken = generateToken();
+  document.getElementById('token-display').textContent = state.caseToken;
+  document.getElementById('token-date').textContent    = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
+  showScreen('screen-token');
+}
+
+function copyToken() {
+  navigator.clipboard.writeText(state.caseToken).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy Token', 2000);
+  });
+}
+
+function startNewReport() {
+  state.currentStep = 0;
+  state.answers = [];
+  state.uploadedFiles = [];
+  state.caseToken = null;
+  document.getElementById('uploaded-files-list').innerHTML = '';
+  document.getElementById('transcription-area').innerHTML = '';
+  document.getElementById('analysis-area').innerHTML = '';
+  document.getElementById('proceed-btn').style.display = 'none';
+  showScreen('screen-intro');
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAG AND DROP
+// ═══════════════════════════════════════════════════════
+const uploadZone = document.getElementById('upload-zone');
+uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    state.uploadedFiles.push(file);
+    const fakeEvent = { target: { files: [file] } };
+    handleFileUpload(fakeEvent);
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════════
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── INIT ──
+renderQuestion();
+</script>
+</body>
+</html>
