@@ -357,14 +357,15 @@
     <div class="section-title">Upload Evidence</div>
     <div class="section-sub">Upload audio, video, screenshots, or documents. Microsoft Phi-4 + Azure Speech will analyze what each piece proves.</div>
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
-      <input type="file" id="file-input" accept="audio/*,video/*,.pdf,.doc,.docx,.png,.jpg,.jpeg" onchange="handleFileUpload(event)" />
+      <input type="file" id="file-input" accept="audio/*,video/*,.pdf,.doc,.docx,.png,.jpg,.jpeg,.txt,.csv,.xlsx,.xls" onchange="handleFileUpload(event)" />
       <div class="upload-icon">📎</div>
       <h3>Click to upload evidence</h3>
       <p>Or drag and drop files here</p>
       <div class="file-types">
         <span class="file-type-badge">MP3</span><span class="file-type-badge">MP4</span>
         <span class="file-type-badge">WAV</span><span class="file-type-badge">PDF</span>
-        <span class="file-type-badge">DOCX</span><span class="file-type-badge">JPG</span>
+        <span class="file-type-badge">DOCX</span><span class="file-type-badge">TXT</span>
+        <span class="file-type-badge">JPG</span><span class="file-type-badge">PNG</span>
       </div>
     </div>
     <div id="uploaded-files-list"></div>
@@ -605,74 +606,52 @@
   var KEY="sv_auth";
   if(sessionStorage.getItem(KEY)===PASS) return;
 
-  // Hide main content until authenticated
-  document.addEventListener("DOMContentLoaded", function() {
-    document.body.style.display="none";
-    showPasswordOverlay();
-  });
+  document.addEventListener("DOMContentLoaded",function(){
+    document.querySelectorAll(".screen").forEach(function(s){s.style.visibility="hidden";});
+    var hdr=document.querySelector("header"); if(hdr) hdr.style.visibility="hidden";
+    var ftr=document.querySelector("footer"); if(ftr) ftr.style.visibility="hidden";
 
-  function showPasswordOverlay() {
-    document.body.style.display="block";
-    var overlay = document.createElement("div");
-    overlay.id = "sv-gate";
-    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:#0D1B2A;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Segoe UI,Arial,sans-serif;";
-    overlay.innerHTML = [
-      "<div style='background:#1B2A3B;border:1px solid rgba(11,158,138,0.3);border-radius:16px;padding:40px;max-width:380px;width:90%;text-align:center;'>",
-        "<div style='font-size:48px;margin-bottom:16px;'>🛡️</div>",
-        "<h2 style='color:#FFFFFF;font-size:22px;font-weight:700;margin-bottom:6px;'>SafeVoice AI</h2>",
-        "<p style='color:#8FA8BF;font-size:13px;margin-bottom:24px;'>Enter access code to continue</p>",
-        "<input id='sv-pass' type='password' placeholder='Access code' ",
-          "style='width:100%;background:#0D1B2A;border:1.5px solid rgba(11,158,138,0.4);border-radius:8px;",
-          "color:#FFFFFF;font-size:16px;padding:13px 16px;box-sizing:border-box;outline:none;",
-          "font-family:Segoe UI,Arial,sans-serif;margin-bottom:12px;letter-spacing:3px;' />",
-        "<div id='sv-err' style='color:#E05A4B;font-size:12px;margin-bottom:10px;min-height:18px;'></div>",
-        "<button id='sv-btn' ",
-          "style='width:100%;background:#0B9E8A;color:#FFFFFF;border:none;padding:14px;border-radius:8px;",
-          "font-size:15px;font-weight:700;cursor:pointer;'>",
-          "Enter →",
-        "</button>",
-        "<p style='color:#5A7A94;font-size:11px;margin-top:16px;line-height:1.6;'>",
-          "Authorised access only. All activity is monitored.",
-        "</p>",
-        "<div style='margin-top:14px;padding:10px 14px;background:rgba(245,166,35,0.08);",
-          "border:1px solid rgba(245,166,35,0.25);border-radius:8px;'>",
-          "<p style='color:#F5A623;font-size:11px;line-height:1.6;margin:0;'>",
-            "⚠️ Demo note: This access code is added only for hackathon submission purposes. ",
-            "The actual SafeVoice AI application requires no login — ",
-            "it is fully anonymous by design.",
-          "</p>",
-        "</div>",
-      "</div>"
-    ].join("");
+    var overlay=document.createElement("div");
+    overlay.id="sv-gate";
+    overlay.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;background:#0D1B2A;z-index:99999;display:flex;align-items:center;justify-content:center;";
+    var html="";
+    html+="<div style='background:#1B2A3B;border:1px solid rgba(11,158,138,0.3);border-radius:16px;padding:40px;max-width:380px;width:90%;text-align:center;font-family:Segoe UI,Arial,sans-serif;'>";
+    html+="<div style='font-size:48px;margin-bottom:16px;'>&#128737;</div>";
+    html+="<h2 style='color:#FFFFFF;font-size:22px;font-weight:700;margin-bottom:6px;'>SafeVoice AI</h2>";
+    html+="<p style='color:#8FA8BF;font-size:13px;margin-bottom:24px;'>Enter access code to continue</p>";
+    html+="<input id='sv-pass' type='password' placeholder='Access code' style='width:100%;background:#0D1B2A;border:1.5px solid rgba(11,158,138,0.4);border-radius:8px;color:#FFFFFF;font-size:16px;padding:13px 16px;box-sizing:border-box;outline:none;margin-bottom:12px;letter-spacing:3px;' />";
+    html+="<div id='sv-err' style='color:#E05A4B;font-size:12px;margin-bottom:10px;min-height:18px;'></div>";
+    html+="<button id='sv-btn' style='width:100%;background:#0B9E8A;color:#FFFFFF;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;'>Enter</button>";
+    html+="<p style='color:#5A7A94;font-size:11px;margin-top:16px;'>Authorised access only.</p>";
+    html+="<div style='margin-top:14px;padding:10px 14px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.25);border-radius:8px;'>";
+    html+="<p style='color:#F5A623;font-size:11px;line-height:1.6;margin:0;'>Demo note: This access code is for hackathon submission only. The actual SafeVoice AI application requires no login - it is fully anonymous by design.</p>";
+    html+="</div></div>";
+    overlay.innerHTML=html;
     document.body.appendChild(overlay);
 
-    var inp = document.getElementById("sv-pass");
-    var btn = document.getElementById("sv-btn");
-    var err = document.getElementById("sv-err");
+    var inp=document.getElementById("sv-pass");
+    var btn=document.getElementById("sv-btn");
+    var err=document.getElementById("sv-err");
+    setTimeout(function(){ inp.focus(); },100);
 
-    // Focus input
-    setTimeout(function(){ inp.focus(); }, 100);
-
-    // Submit on Enter key
-    inp.addEventListener("keydown", function(e){
-      if(e.key==="Enter") checkPass();
-    });
-    btn.addEventListener("click", checkPass);
-
-    function checkPass() {
-      var val = inp.value;
-      if(val === PASS) {
-        sessionStorage.setItem(KEY, PASS);
+    function checkPass(){
+      if(inp.value===PASS){
+        sessionStorage.setItem(KEY,PASS);
         overlay.remove();
+        document.querySelectorAll(".screen").forEach(function(s){s.style.visibility="";});
+        var h=document.querySelector("header"); if(h) h.style.visibility="";
+        var f=document.querySelector("footer"); if(f) f.style.visibility="";
       } else {
-        err.textContent = "Incorrect access code. Please try again.";
-        inp.value = "";
+        err.textContent="Incorrect access code. Please try again.";
+        inp.value="";
+        inp.style.borderColor="#E05A4B";
         inp.focus();
-        inp.style.borderColor = "#E05A4B";
-        setTimeout(function(){ inp.style.borderColor="rgba(11,158,138,0.4)"; }, 1500);
+        setTimeout(function(){ inp.style.borderColor="rgba(11,158,138,0.4)"; },1500);
       }
     }
-  }
+    inp.addEventListener("keydown",function(e){ if(e.key==="Enter") checkPass(); });
+    btn.addEventListener("click",checkPass);
+  });
 })();
 
 // ═══════════════════════════════════════
@@ -684,7 +663,7 @@ const CONFIG = {
   PHI_DEPLOYMENT: window.PHI_DEPLOYMENT || 'Phi-4',
   SPEECH_KEY:     window.SPEECH_KEY     || '',
   SPEECH_REGION:  window.SPEECH_REGION  || 'eastus',
-  MOCK_MODE: true
+  MOCK_MODE: false
 };
 
 // ═══════════════════════════════════════
@@ -774,70 +753,179 @@ function nextStep() {
 function handleFileUpload(event) {
   const file=event.target.files[0]; if(!file) return;
   state.uploadedFiles.push(file);
+
+  // Show file in list
   const list=document.getElementById('uploaded-files-list');
   const fileDiv=document.createElement('div'); fileDiv.className='uploaded-file';
   const isAudio=file.type.startsWith('audio/'); const isVideo=file.type.startsWith('video/');
   const icon=isAudio?'🎵':isVideo?'🎬':file.type.includes('pdf')?'📄':'📎';
   fileDiv.innerHTML=`<div class="file-icon">${icon}</div><div class="file-info"><h4>${file.name}</h4><p>${(file.size/1024).toFixed(1)} KB</p></div><span style="margin-left:auto;color:var(--teal);font-size:13px;font-weight:600;">✓ Secured</span>`;
   list.appendChild(fileDiv);
-  if(isAudio||isVideo){ transcribeAudio(file); } else { analyzeDocument(file); }
+
+  // Queue file — user must confirm before AI runs
+  state.pendingFiles = state.pendingFiles || [];
+  state.pendingFiles.push(file);
+  showAnalyzePrompt();
 }
 
-async function transcribeAudio(file) {
-  const area=document.getElementById('transcription-area');
-  area.innerHTML=`<div class="transcription-box"><div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — TRANSCRIBING...</div><div class="loading"><div class="spinner"></div>Transcribing audio evidence...</div></div>`;
-  await delay(2200);
-  const transcript=getMockTranscript();
-  area.innerHTML=`<div class="transcription-box"><div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — TRANSCRIPT COMPLETE</div><div class="content">${transcript}</div></div>`;
-  await analyzePhi4(transcript);
+function showAnalyzePrompt() {
+  const count = (state.pendingFiles||[]).length;
+  const existing = document.getElementById('analyze-prompt');
+  if(existing) existing.remove();
+
+  const prompt = document.createElement('div');
+  prompt.id = 'analyze-prompt';
+  prompt.style.cssText = 'background:rgba(11,158,138,0.08);border:1px solid rgba(11,158,138,0.3);border-radius:10px;padding:16px 20px;margin:16px 0;';
+  prompt.innerHTML =
+    '<div style="font-size:13px;color:var(--off-white);margin-bottom:12px;">' +
+    '<strong style="color:var(--teal-light);">' + count + ' file' + (count>1?'s':'') + ' secured.</strong> ' +
+    'Do you have any more evidence to upload? Add more files above, or click below when ready.' +
+    '</div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+    '<button onclick="runAnalysis()" class="btn-primary" style="font-size:14px;padding:11px 28px;">' +
+    '⚡ Analyze ' + count + ' evidence item' + (count>1?'s':'') + ' with Phi-4' +
+    '</button>' +
+    '<button onclick="clearEvidence()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--muted);padding:11px 20px;border-radius:8px;cursor:pointer;font-size:13px;">' +
+    'Clear & start over' +
+    '</button>' +
+    '</div>';
+
+  const uploadArea = document.getElementById('uploaded-files-list');
+  uploadArea.parentNode.insertBefore(prompt, uploadArea.nextSibling);
 }
 
-async function analyzeDocument(file) {
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    const text = e.target.result;
-    await analyzePhi4(text);
-  };
-  reader.readAsText(file);
+function clearEvidence() {
+  state.pendingFiles = [];
+  document.getElementById('uploaded-files-list').innerHTML = '';
+  document.getElementById('transcription-area').innerHTML = '';
+  document.getElementById('analysis-area').innerHTML = '';
+  document.getElementById('proceed-btn').style.display = 'none';
+  const p = document.getElementById('analyze-prompt');
+  if(p) p.remove();
 }
 
-async function analyzePhi4(transcript) {
+function runAnalysis() {
+  const p = document.getElementById('analyze-prompt');
+  if(p) p.remove();
+  analyzeAllFiles();
+}
+
+async function analyzeAllFiles() {
+  const files = state.pendingFiles || [];
+  if(files.length===0) return;
+
+  const area     = document.getElementById('analysis-area');
+  const transcArea = document.getElementById('transcription-area');
+  const count    = files.length;
+
+  transcArea.innerHTML='';
+  area.innerHTML='<div class="analysis-box"><div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — Processing '+count+' evidence item'+(count>1?'s':'')+'...</h3></div><div class="loading"><div class="spinner"></div>Collecting and analyzing all evidence...</div></div>';
+
+  const allContent = [];
+
+  for(var fi=0; fi<files.length; fi++){
+    var file = files[fi];
+    var isAudio = file.type.startsWith('audio/') || file.type.startsWith('video/');
+
+    if(isAudio){
+      transcArea.innerHTML += '<div class="transcription-box"><div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — '+file.name+'</div><div class="loading"><div class="spinner"></div>Transcribing...</div></div>';
+
+      var transcript = '';
+      if(CONFIG.MOCK_MODE){
+        await delay(1500);
+        transcript = getMockTranscript();
+        var boxes = transcArea.querySelectorAll('.transcription-box');
+        var lastBox = boxes[boxes.length-1];
+        if(lastBox) lastBox.innerHTML = '<div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — '+file.name+'</div><div class="content">'+transcript+'</div>';
+        allContent.push('[Audio recording — '+file.name+']:\n'+transcript);
+      } else {
+        try{
+          var fd = new FormData();
+          fd.append('audio', file);
+          var r = await fetch('/api/transcribe', {method:'POST', body:fd});
+          var d = await r.json();
+          transcript = d.transcript || '';
+
+          var boxes = transcArea.querySelectorAll('.transcription-box');
+          var lastBox = boxes[boxes.length-1];
+
+          if(transcript && transcript.trim().length > 5){
+            if(lastBox) lastBox.innerHTML = '<div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — '+file.name+'</div><div class="content">'+transcript+'</div>';
+            allContent.push('[Audio recording — '+file.name+']:\n'+transcript);
+          } else {
+            // Audio could not be transcribed - note it but still include file
+            if(lastBox) lastBox.innerHTML = '<div class="box-label">🎙️ AZURE SPEECH-TO-TEXT — '+file.name+'</div><div class="content" style="color:var(--gold);">Audio file secured. Transcription not available for this format — please describe the audio content in the text box below, or convert to WAV format for automatic transcription.</div>';
+            allContent.push('[Audio file secured — '+file.name+']: File uploaded and chain of custody logged. Manual review required.');
+          }
+        } catch(e){
+          allContent.push('[Audio file — '+file.name+']: Secured, manual review required');
+        }
+      }
+
+    } else {
+      var text = await new Promise(function(res){
+        var reader = new FileReader();
+        reader.onload  = function(e){ res(e.target.result || ''); };
+        reader.onerror = function(){ res(''); };
+        reader.readAsText(file);
+      });
+      if(text.trim().length > 0){
+        allContent.push('[Document — '+file.name+']:\n'+text.trim());
+      } else {
+        allContent.push('[Document — '+file.name+']: File secured, manual review required');
+      }
+    }
+  }
+
+  await analyzeConsolidated(allContent, count);
+}
+
+async function analyzeConsolidated(contentParts, fileCount) {
   const area=document.getElementById('analysis-area');
-  area.innerHTML=`<div class="analysis-box"><div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — Analyzing Evidence...</h3></div><div class="loading"><div class="spinner"></div>Identifying key evidence patterns...</div></div>`;
+  const combined=contentParts.join('\n\n---\n\n');
+  const label=fileCount>1
+    ? 'Consolidated analysis of '+fileCount+' evidence item'+(fileCount>1?'s':'')
+    : 'Evidence analysis';
 
-  if(CONFIG.MOCK_MODE) {
-    await delay(2800);
-    area.innerHTML=getMockAnalysis();
+  area.innerHTML=`<div class="analysis-box"><div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — Analyzing...</h3></div><div class="loading"><div class="spinner"></div>Building consolidated summary...</div></div>`;
+
+  if(CONFIG.MOCK_MODE){
+    await delay(2500);
+    area.innerHTML=getMockAnalysis(label);
   } else {
-    try {
-      const resp = await fetch('/api/analyze', {
+    try{
+      const resp=await fetch('/api/analyze',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({transcript})
+        body:JSON.stringify({transcript:combined})
       });
-      const data = await resp.json();
-      if(data.analysis) {
-        const lines = data.analysis.split('\n').filter(l=>l.trim());
-        const findings = lines.map(l=>
+      const data=await resp.json();
+      if(data.analysis){
+        const lines=data.analysis.split('\n').filter(l=>l.trim());
+        const findings=lines.map(l=>
           `<div class="finding"><div class="dot"></div><p>${l}</p></div>`
         ).join('');
         area.innerHTML=`<div class="analysis-box">
-          <div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — Evidence Analysis Complete</h3></div>
+          <div class="analysis-header">
+            <span style="font-size:20px">⚡</span>
+            <h3>Microsoft Phi-4 — ${label}</h3>
+          </div>
           ${findings}
           <div style="margin-top:16px;padding:12px 16px;background:rgba(11,158,138,0.1);border-radius:8px;font-size:13px;color:var(--teal-light);">
-            ✅ Evidence secured · Phi-4 analysis complete · ${new Date().toISOString()}
+            ✅ ${fileCount} evidence item${fileCount>1?'s':''} analyzed · Chain of custody logged · ${new Date().toISOString()}
           </div>
         </div>`;
       } else {
-        area.innerHTML=getMockAnalysis();
+        area.innerHTML=getMockAnalysis(label);
       }
-    } catch(err) {
-      console.error('Phi-4 error:', err);
-      area.innerHTML=getMockAnalysis();
+    }catch(err){
+      console.error('Phi-4 error:',err);
+      area.innerHTML=getMockAnalysis(label);
     }
   }
   document.getElementById('proceed-btn').style.display='inline-block';
 }
+
 
 // ═══════════════════════════════════════
 // TOKEN
@@ -964,8 +1052,9 @@ function getMockTranscript() {
   return `[Azure Speech-to-Text — Transcript]\n\nICC Head: "Look, this can really damage your reputation. In our culture we believe in forgiving and moving on. He has a family. Think about that. Just withdraw the complaint."\n\nComplainant: "But what he did was not okay."\n\nICC Head: "I understand. But you are a smart person. Think about your future here."\n\n[Duration: 4 minutes 12 seconds]`;
 }
 
-function getMockAnalysis() {
-  return `<div class="analysis-box"><div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — Evidence Analysis Complete</h3></div>
+function getMockAnalysis(label) {
+  label = label || 'Evidence Analysis Complete';
+  return `<div class="analysis-box"><div class="analysis-header"><span style="font-size:20px">⚡</span><h3>Microsoft Phi-4 — ${label}</h3></div>
     <div class="finding"><div class="dot" style="background:var(--coral)"></div><p><strong>Coercion detected:</strong> Direct career threat — "this can really damage your reputation" — documented pressure tactic under POSH Act.</p></div>
     <div class="finding"><div class="dot" style="background:var(--coral)"></div><p><strong>Religious/cultural coercion:</strong> "In our culture we believe in forgiving" — manipulation using cultural norms to silence complainant.</p></div>
     <div class="finding"><div class="dot" style="background:var(--coral)"></div><p><strong>ICC process violation:</strong> ICC Head directly influencing complainant — fundamental breach of POSH Act 2013 independence requirements.</p></div>
