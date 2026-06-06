@@ -236,23 +236,88 @@
 <!-- ═══════════════════════════ SCREEN 1: INTRO ═══════════════════════════ -->
 <div id="screen-intro" class="screen active">
   <div class="container">
-    <div class="intro-hero">
-      <div class="big-icon">🛡️</div>
-      <h2>You are safe here.</h2>
-      <p>No login required. No name asked. No identity stored. Report a workplace incident confidentially — at your own pace.</p>
-      <div class="model-badge">⚡ Powered by Microsoft Phi-4 + Azure AI</div><br/><br/>
-      <button class="btn-primary" onclick="startJourney()">I Want to Report an Incident →</button>
-      &nbsp;&nbsp;
-      <button class="btn-secondary" onclick="showCheckStatus()">Check My Case Status</button>
-      &nbsp;&nbsp;
-      <button class="btn-secondary" onclick="showSupport()" style="margin-top:12px;">📚 Support Hub & Helplines</button>
+
+    <!-- Hero -->
+    <div style="text-align:center;padding:48px 20px 36px;">
+      <div style="font-size:52px;margin-bottom:20px;">🛡️</div>
+      <h2 style="font-size:32px;font-weight:700;color:var(--white);margin-bottom:10px;">You are safe here.</h2>
+      <p style="font-size:16px;color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 32px;">No login. No name. No identity stored.<br/>Report a workplace incident confidentially — at your own pace.</p>
+
+      <!-- PRIMARY ACTION -->
+      <button class="btn-primary" onclick="startJourney()" style="font-size:17px;padding:18px 52px;border-radius:10px;width:100%;max-width:380px;display:block;margin:0 auto 14px;">
+        Report an Incident
+      </button>
+
+      <!-- RETURNING USER — status link -->
+      <button onclick="showCheckStatus()" style="background:transparent;border:none;color:var(--teal-light);font-size:14px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px;">
+        Have a case token? Check your case status →
+      </button>
+
+
+      <!-- SOS BUTTON — prominent, separate, protected -->
+      <div style="margin-top:24px;">
+        <button onclick="confirmSOS()" style="background:transparent;border:2px solid var(--red);color:#E74C3C;font-size:15px;font-weight:700;cursor:pointer;padding:13px 36px;border-radius:8px;width:100%;max-width:380px;display:block;margin:0 auto;letter-spacing:0.5px;">
+          🆘 &nbsp;Emergency SOS Alert
+        </button>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center;">
+          Only for immediate threat or unbearable retaliation after filing
+        </div>
+      </div>
     </div>
-    <div class="promise-grid">
-      <div class="promise-card"><div class="icon">🔒</div><h4>Zero Identity</h4><p>We never ask for your name, email, or employee ID. Ever.</p></div>
-      <div class="promise-card"><div class="icon">🤝</div><h4>Guided by AI</h4><p>Microsoft Phi-4 guides you — one gentle question at a time.</p></div>
-      <div class="promise-card"><div class="icon">🆘</div><h4>SOS Alerts</h4><p>Raise an emergency alert on your case token if situation worsens.</p></div>
+
+    <!-- Three trust pillars -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+      <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 14px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:8px;">🔒</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px;">Zero identity</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;">No name, email, or ID ever stored</div>
+      </div>
+      <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 14px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:8px;">🤖</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px;">AI guided</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;">Phi-4 walks you through gently</div>
+      </div>
+      <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 14px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:8px;">⚖️</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px;">Legally protected</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;">POSH Act 2013 compliant</div>
+      </div>
     </div>
-    <div class="alert info"><span>ℹ️</span><span>POSH Act 2013 compliant. Your complaint routes to an <strong>independent ICC member</strong> — not HR or management.</span></div>
+
+    <!-- Secondary navigation — clean tile grid -->
+    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-bottom:12px;">EXPLORE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+
+        <button onclick="showScreen('screen-knowledge')" style="background:var(--navy-mid);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:left;cursor:pointer;width:100%;">
+          <div style="font-size:18px;margin-bottom:6px;">📚</div>
+          <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Know your rights</div>
+          <div style="font-size:11px;color:var(--muted);">POSH Act · FAQ · Mental health</div>
+        </button>
+
+        <button onclick="showScreen('screen-helplines')" style="background:var(--navy-mid);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:left;cursor:pointer;width:100%;">
+          <div style="font-size:18px;margin-bottom:6px;">📞</div>
+          <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Support contacts</div>
+          <div style="font-size:11px;color:var(--muted);">ICC · HR · EAP · Security</div>
+        </button>
+
+
+
+        <div style="background:var(--navy-mid);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:14px;opacity:0.5;">
+          <div style="font-size:18px;margin-bottom:6px;">🔐</div>
+          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:2px;">ICC officer portal</div>
+          <div style="font-size:11px;color:var(--muted);">Requires ICC credentials</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.7;padding-bottom:8px;">
+      Complaint routed to independent ICC — not HR or management.<br/>
+      <span style="color:rgba(11,158,138,0.6);">⚡ Powered by Microsoft Phi-4 + Azure AI</span>
+    </div>
+
   </div>
 </div>
 
@@ -275,7 +340,8 @@
       <div class="input-area">
         <textarea id="user-answer" placeholder="Type your answer here..." rows="4"></textarea>
         <div class="input-row">
-          <span class="char-hint">Stored only with your anonymous case token</span>
+          <button id="back-btn" onclick="prevStep()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--muted);padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;display:none;">← Back</button>
+          <span class="char-hint" style="flex:1;text-align:center;">Stored only with your anonymous case token</span>
           <button class="btn-primary" onclick="nextStep()">Continue →</button>
         </div>
       </div>
@@ -594,18 +660,32 @@ function renderQuestion() {
   document.getElementById('progress-fill').style.width=`${((state.currentStep+1)/total)*100}%`;
   document.getElementById('step-tag').textContent=q.step;
   document.getElementById('question-text').textContent=q.text;
-  document.getElementById('user-answer').value='';
   document.getElementById('user-answer').placeholder=q.placeholder;
+  // Restore saved answer if going back
+  document.getElementById('user-answer').value=state.answers[state.currentStep]?.answer||'';
   const dots=document.getElementById('step-dots'); dots.innerHTML='';
   QUESTIONS.forEach((_,i)=>{ const d=document.createElement('div'); d.className='step-dot'+(i<state.currentStep?' done':i===state.currentStep?' active':''); dots.appendChild(d); });
   const qr=document.getElementById('quick-replies'); qr.innerHTML='';
   q.quickReplies.forEach(r=>{ const btn=document.createElement('button'); btn.className='quick-reply'; btn.textContent=r; btn.onclick=()=>{ document.getElementById('user-answer').value=r; }; qr.appendChild(btn); });
+  // Show back button only from step 2 onwards
+  const backBtn=document.getElementById('back-btn');
+  if(backBtn) backBtn.style.display=state.currentStep>0?'block':'none';
+}
+
+function prevStep() {
+  if(state.currentStep===0) return;
+  // Save current answer before going back if user typed something new
+  const current=document.getElementById('user-answer').value.trim();
+  if(current) state.answers[state.currentStep]={question:QUESTIONS[state.currentStep].text,answer:current};
+  state.currentStep--;
+  renderQuestion();
 }
 
 function nextStep() {
   const answer=document.getElementById('user-answer').value.trim();
   if(!answer){ document.getElementById('user-answer').style.borderColor='var(--coral)'; setTimeout(()=>document.getElementById('user-answer').style.borderColor='',1500); return; }
-  state.answers.push({question:QUESTIONS[state.currentStep].text,answer});
+  // Always overwrite — handles both new answer and edited answer on back
+  state.answers[state.currentStep]={question:QUESTIONS[state.currentStep].text,answer};
   state.currentStep++;
   if(state.currentStep<QUESTIONS.length){ renderQuestion(); } else { showScreen('screen-upload'); }
 }
@@ -789,173 +869,89 @@ uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classLi
 uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('dragover'));
 uploadZone.addEventListener('drop',e=>{e.preventDefault();uploadZone.classList.remove('dragover');const file=e.dataTransfer.files[0];if(file) handleFileUpload({target:{files:[file]}});});
 
+function confirmSOS() {
+  // Two-step confirmation to prevent accidental trigger
+  const step1 = confirm(
+    "⚠️ SOS ALERT WARNING\n\n" +
+    "This will immediately alert:\n" +
+    "• Office security team\n" +
+    "• ICC independent member\n" +
+    "• HR head (if Level 2 or above)\n\n" +
+    "Only proceed if you are experiencing:\n" +
+    "• Active physical threat\n" +
+    "• Immediate retaliation\n" +
+    "• Unbearable hostile environment\n\n" +
+    "Are you sure you want to raise an SOS alert?"
+  );
+  if (!step1) return;
+
+  const step2 = confirm(
+    "🔒 FINAL CONFIRMATION\n\n" +
+    "Your identity remains completely anonymous.\n" +
+    "Your case token is your only reference.\n\n" +
+    "Confirm: Send SOS alert now?"
+  );
+  if (!step2) return;
+
+  showSOS();
+}
+
 function delay(ms){return new Promise(r=>setTimeout(r,ms));}
 renderQuestion();
 </script>
+
 </body>
-</html>
-<!-- ═══ INJECTED SCREENS: KNOWLEDGE HUB + HELPLINES ═══ -->
-<script>
-// ── PATCH NAV: add knowledge + helpline buttons to intro ──
-window.addEventListener('DOMContentLoaded', () => {
-
-  // Add two new buttons to intro hero
-  const hero = document.querySelector('.intro-hero');
-  if (hero) {
-    const row = document.createElement('div');
-    row.style.cssText = 'display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;';
-    row.innerHTML = `
-      <button class="btn-secondary" onclick="showScreen('screen-knowledge')" style="font-size:13px;padding:10px 22px;">📚 Know Your Rights</button>
-      <button class="btn-secondary" onclick="showScreen('screen-helplines')" style="font-size:13px;padding:10px 22px;">📞 Helplines & Support</button>
-    `;
-    hero.appendChild(row);
-  }
-
-  // Add knowledge + helpline links to token screen guarantee grid
-  const tokenHero = document.querySelector('.token-hero');
-  if (tokenHero) {
-    const note = document.createElement('div');
-    note.style.cssText = 'display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;';
-    note.innerHTML = `
-      <button class="btn-secondary" onclick="showScreen('screen-knowledge')" style="font-size:13px;padding:10px 22px;">📚 Know Your Rights</button>
-      <button class="btn-secondary" onclick="showScreen('screen-helplines')" style="font-size:13px;padding:10px 22px;">📞 Helplines & Support</button>
-    `;
-    tokenHero.insertBefore(note, tokenHero.querySelector('.alert'));
-  }
-});
-</script>
-
+<!-- ═══ KNOWLEDGE HUB + INTERNAL CONTACTS SCREENS ═══ -->
 <style>
-/* ── KNOWLEDGE HUB ── */
-.kb-section { margin-bottom: 28px; }
-.kb-section-header {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--navy-card);
-  border-left: 4px solid var(--teal);
-  padding: 14px 20px; border-radius: 0 8px 8px 0;
-  cursor: pointer; transition: background 0.2s;
-  margin-bottom: 2px;
-}
-.kb-section-header:hover { background: var(--navy-mid); }
-.kb-section-header .kb-icon { font-size: 22px; flex-shrink: 0; }
-.kb-section-header h3 { font-size: 16px; color: var(--white); font-weight: 700; flex: 1; }
-.kb-section-header .kb-toggle { font-size: 16px; color: var(--teal); }
-.kb-content {
-  background: var(--navy-card);
-  border: 1px solid rgba(11,158,138,0.15);
-  border-radius: 0 0 8px 8px;
-  padding: 20px 24px;
-  display: none;
-}
-.kb-content.open { display: block; }
-.kb-q { font-size: 14px; color: var(--teal-light); font-weight: 700; margin: 14px 0 6px; }
-.kb-a { font-size: 13px; color: var(--off-white); line-height: 1.7; margin-bottom: 4px; }
-.kb-right {
-  background: rgba(11,158,138,0.08);
-  border: 1px solid rgba(11,158,138,0.2);
-  border-radius: 8px; padding: 12px 16px; margin: 10px 0;
-  display: flex; gap: 10px; align-items: flex-start;
-}
-.kb-right .r-num {
-  background: var(--teal); color: var(--white);
-  font-size: 11px; font-weight: 700;
-  width: 22px; height: 22px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-top: 1px;
-}
-.kb-right p { font-size: 13px; color: var(--off-white); line-height: 1.6; }
-
-/* ── HELPLINES ── */
-.helpline-card {
-  background: var(--navy-card);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 12px; padding: 20px 22px;
-  margin-bottom: 14px;
-  transition: border-color 0.2s;
-}
-.helpline-card:hover { border-color: rgba(11,158,138,0.3); }
-.helpline-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
-.helpline-icon { font-size: 28px; flex-shrink: 0; }
-.helpline-info { flex: 1; }
-.helpline-info h4 { font-size: 15px; color: var(--white); font-weight: 700; margin-bottom: 3px; }
-.helpline-info p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.helpline-number {
-  font-family: 'Courier New', monospace;
-  font-size: 20px; color: var(--teal-light);
-  font-weight: 700; letter-spacing: 2px;
-  margin-bottom: 4px;
-}
-.helpline-hours { font-size: 11px; color: var(--muted); }
-.helpline-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-.call-btn {
-  background: var(--teal); color: var(--white);
-  border: none; padding: 9px 20px; border-radius: 6px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-  transition: background 0.2s;
-}
-.call-btn:hover { background: var(--teal-light); }
-.register-btn {
-  background: transparent; color: var(--gold);
-  border: 1.5px solid var(--gold); padding: 9px 20px;
-  border-radius: 6px; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
-}
-.register-btn:hover { background: rgba(245,166,35,0.1); }
-.registered-badge {
-  background: rgba(26,154,90,0.15);
-  border: 1px solid var(--green);
-  color: #4ADE80; padding: 9px 16px;
-  border-radius: 6px; font-size: 12px; font-weight: 700;
-  display: none; align-items: center; gap: 6px;
-}
-
-/* ── CALL LOG MODAL ── */
-.modal-overlay {
-  display: none; position: fixed;
-  top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 1000; align-items: center; justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal-box {
-  background: var(--navy-mid);
-  border: 1px solid rgba(11,158,138,0.3);
-  border-radius: 16px; padding: 32px;
-  max-width: 480px; width: 90%; text-align: center;
-}
-.modal-box h3 { font-size: 20px; color: var(--white); font-weight: 700; margin-bottom: 8px; }
-.modal-box p  { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-.modal-token-display {
-  font-family: 'Courier New', monospace;
-  font-size: 18px; color: var(--teal-light);
-  font-weight: 700; letter-spacing: 2px;
-  background: var(--navy); padding: 12px 20px;
-  border-radius: 8px; margin: 12px 0 20px;
-  border: 1px solid rgba(11,158,138,0.3);
-}
-.modal-privacy {
-  font-size: 11px; color: var(--muted);
-  background: var(--navy); padding: 10px 14px;
-  border-radius: 6px; margin-bottom: 20px;
-  line-height: 1.5; text-align: left;
-}
-.modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.kb-section{margin-bottom:28px;}
+.kb-section-header{display:flex;align-items:center;gap:12px;background:var(--navy-card);border-left:4px solid var(--teal);padding:14px 20px;border-radius:0 8px 8px 0;cursor:pointer;transition:background 0.2s;margin-bottom:2px;}
+.kb-section-header:hover{background:var(--navy-mid);}
+.kb-section-header .kb-icon{font-size:22px;flex-shrink:0;}
+.kb-section-header h3{font-size:16px;color:var(--white);font-weight:700;flex:1;}
+.kb-section-header .kb-toggle{font-size:16px;color:var(--teal);}
+.kb-content{background:var(--navy-card);border:1px solid rgba(11,158,138,0.15);border-radius:0 0 8px 8px;padding:20px 24px;display:none;}
+.kb-content.open{display:block;}
+.kb-q{font-size:14px;color:var(--teal-light);font-weight:700;margin:14px 0 6px;}
+.kb-a{font-size:13px;color:var(--off-white);line-height:1.7;margin-bottom:4px;}
+.kb-right{background:rgba(11,158,138,0.08);border:1px solid rgba(11,158,138,0.2);border-radius:8px;padding:12px 16px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;}
+.kb-right .r-num{background:var(--teal);color:var(--white);font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.kb-right p{font-size:13px;color:var(--off-white);line-height:1.6;}
+.helpline-card{background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s;}
+.helpline-card:hover{border-color:rgba(11,158,138,0.3);}
+.helpline-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px;}
+.helpline-icon{font-size:28px;flex-shrink:0;}
+.helpline-info{flex:1;}
+.helpline-info h4{font-size:15px;color:var(--white);font-weight:700;margin-bottom:3px;}
+.helpline-info p{font-size:12px;color:var(--muted);line-height:1.5;}
+.helpline-number{font-family:'Courier New',monospace;font-size:20px;color:var(--teal-light);font-weight:700;letter-spacing:2px;margin-bottom:4px;}
+.helpline-hours{font-size:11px;color:var(--muted);}
+.helpline-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.call-btn{background:var(--teal);color:var(--white);border:none;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background 0.2s;}
+.call-btn:hover{background:var(--teal-light);}
+.register-btn{background:transparent;color:var(--gold);border:1.5px solid var(--gold);padding:9px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.register-btn:hover{background:rgba(245,166,35,0.1);}
+.registered-badge{background:rgba(26,154,90,0.15);border:1px solid var(--green);color:#4ADE80;padding:9px 16px;border-radius:6px;font-size:12px;font-weight:700;display:none;align-items:center;gap:6px;}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--navy-mid);border:1px solid rgba(11,158,138,0.3);border-radius:16px;padding:32px;max-width:480px;width:90%;text-align:center;}
+.modal-box h3{font-size:20px;color:var(--white);font-weight:700;margin-bottom:8px;}
+.modal-box p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.modal-token-display{font-family:'Courier New',monospace;font-size:18px;color:var(--teal-light);font-weight:700;letter-spacing:2px;background:var(--navy);padding:12px 20px;border-radius:8px;margin:12px 0 20px;border:1px solid rgba(11,158,138,0.3);}
+.modal-privacy{font-size:11px;color:var(--muted);background:var(--navy);padding:10px 14px;border-radius:6px;margin-bottom:20px;line-height:1.5;text-align:left;}
+.modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 </style>
 
-<!-- ═══════════════════════════ SCREEN 9: KNOWLEDGE HUB ═══════════════════════════ -->
+<!-- SCREEN: KNOWLEDGE HUB -->
 <div id="screen-knowledge" class="screen">
   <div class="container">
     <div class="section-label">KNOW YOUR RIGHTS</div>
     <div class="section-title">SafeVoice Knowledge Hub</div>
-    <div class="section-sub">Your single source of truth — POSH rights, mental health support, and answers to common questions. All in plain language, no legal jargon.</div>
+    <div class="section-sub">Your single source of truth — POSH rights, mental health support, and answers to common questions. Plain language, no legal jargon.</div>
 
     <div class="alert info" style="margin-bottom:24px;">
-      <span>ℹ️</span>
-      <span>This information is for general guidance only. For specific legal advice, consult a qualified lawyer. Free legal aid is available — see the <strong>Helplines</strong> section.</span>
+      <span>ℹ️</span><span>For specific legal advice, consult a qualified lawyer. Free legal aid is available through your company's legal team — see <strong>Support Contacts</strong>.</span>
     </div>
 
-    <!-- ── SECTION 1: POSH ACT RIGHTS ── -->
     <div class="kb-section">
       <div class="kb-section-header" onclick="toggleKB('kb-posh')">
         <div class="kb-icon">⚖️</div>
@@ -963,27 +959,20 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="kb-toggle" id="kb-posh-toggle">▼</div>
       </div>
       <div class="kb-content open" id="kb-posh">
-        <p class="kb-a" style="margin-bottom:14px;">The Prevention of Sexual Harassment (POSH) Act 2013 is Indian law that protects every employee — permanent, contractual, temporary, or intern — in any workplace with 10 or more employees.</p>
-
-        <div class="kb-right"><div class="r-num">1</div><p><strong>Right to file a complaint</strong> — You can file a complaint within 3 months of the incident. This deadline can be extended by the ICC if there is sufficient cause.</p></div>
-        <div class="kb-right"><div class="r-num">2</div><p><strong>Right to confidentiality</strong> — Your identity, complaint, and evidence cannot be shared with anyone by the ICC. This is a legal obligation, not a courtesy.</p></div>
-        <div class="kb-right"><div class="r-num">3</div><p><strong>Right to a fair investigation</strong> — The ICC must complete the inquiry within 90 days. You have the right to present your case and cross-examine witnesses.</p></div>
-        <div class="kb-right"><div class="r-num">4</div><p><strong>Right to interim relief</strong> — You can request to be transferred, work from home, or have the accused transferred during the investigation — before a verdict.</p></div>
-        <div class="kb-right"><div class="r-num">5</div><p><strong>Right against retaliation</strong> — Any retaliation for filing a complaint is itself a punishable offence under the Act. Document everything.</p></div>
-        <div class="kb-right"><div class="r-num">6</div><p><strong>Right to appeal</strong> — If you are unhappy with the ICC's decision, you can appeal to the employer, a court, or an appellate authority within 90 days.</p></div>
-
-        <div class="kb-q">What counts as sexual harassment under the Act?</div>
-        <div class="kb-a">Unwelcome physical contact, demands for sexual favours, sexually coloured remarks, showing pornography, or any other unwelcome verbal or non-verbal conduct of a sexual nature. It also includes hostile work environment created by such behaviour.</div>
-
-        <div class="kb-q">What if my company has no ICC?</div>
-        <div class="kb-a">If your company has fewer than 10 employees, or if the ICC is non-functional, you can file your complaint with the <strong>Local Complaints Committee (LCC)</strong> set up by the District Officer in your area. This is mandatory under the Act.</div>
-
+        <p class="kb-a" style="margin-bottom:14px;">The POSH Act 2013 protects every employee — permanent, contractual, temporary, or intern — in any workplace with 10 or more employees.</p>
+        <div class="kb-right"><div class="r-num">1</div><p><strong>Right to file a complaint</strong> — Within 3 months of the incident. Extendable by the ICC if there is sufficient cause.</p></div>
+        <div class="kb-right"><div class="r-num">2</div><p><strong>Right to confidentiality</strong> — Your identity, complaint, and evidence cannot be shared by the ICC. This is a legal obligation.</p></div>
+        <div class="kb-right"><div class="r-num">3</div><p><strong>Right to a fair investigation</strong> — ICC must complete inquiry within 90 days. You can present your case and cross-examine witnesses.</p></div>
+        <div class="kb-right"><div class="r-num">4</div><p><strong>Right to interim relief</strong> — You can request transfer, work from home, or have the accused transferred during investigation.</p></div>
+        <div class="kb-right"><div class="r-num">5</div><p><strong>Right against retaliation</strong> — Any retaliation for filing is itself a punishable offence. Document everything.</p></div>
+        <div class="kb-right"><div class="r-num">6</div><p><strong>Right to appeal</strong> — Unhappy with ICC decision? Appeal within 90 days to employer, court, or appellate authority.</p></div>
+        <div class="kb-q">What counts as sexual harassment?</div>
+        <div class="kb-a">Unwelcome physical contact, demands for sexual favours, sexually coloured remarks, showing pornography, or any unwelcome verbal or non-verbal conduct of a sexual nature — including a hostile work environment created by such behaviour.</div>
         <div class="kb-q">Can I withdraw my complaint?</div>
-        <div class="kb-a">Yes, but only in writing. If the withdrawal is due to pressure, coercion, or threats — that coercion itself is a separate offence. SafeVoice AI monitors for exactly this pattern.</div>
+        <div class="kb-a">Yes, but only in writing. If the withdrawal is due to pressure or threats — that coercion is itself a separate offence. SafeVoice AI monitors for exactly this pattern.</div>
       </div>
     </div>
 
-    <!-- ── SECTION 2: MENTAL HEALTH ── -->
     <div class="kb-section">
       <div class="kb-section-header" onclick="toggleKB('kb-mental')">
         <div class="kb-icon">💚</div>
@@ -991,27 +980,16 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="kb-toggle" id="kb-mental-toggle">▼</div>
       </div>
       <div class="kb-content open" id="kb-mental">
-        <p class="kb-a" style="margin-bottom:14px;">What you are going through is real, and what you are feeling is valid. Many survivors experience a range of emotions — and all of them are normal.</p>
-
         <div class="kb-right"><div class="r-num">✓</div><p><strong>It is not your fault.</strong> Harassment is always the responsibility of the person who commits it — never the person who receives it.</p></div>
-        <div class="kb-right"><div class="r-num">✓</div><p><strong>You do not have to prove it alone.</strong> SafeVoice AI's evidence intelligence is designed to do the heavy lifting — you just need to share what you have.</p></div>
-        <div class="kb-right"><div class="r-num">✓</div><p><strong>Taking your time is okay.</strong> There is no rush to decide what to do. Use this portal to document at your own pace.</p></div>
-
+        <div class="kb-right"><div class="r-num">✓</div><p><strong>You do not have to prove it alone.</strong> SafeVoice AI's evidence intelligence does the heavy lifting — you just share what you have.</p></div>
+        <div class="kb-right"><div class="r-num">✓</div><p><strong>Taking your time is okay.</strong> There is no rush. Use this portal to document at your own pace.</p></div>
         <div class="kb-q">Common feelings after a workplace harassment incident</div>
         <div class="kb-a">Shock, self-doubt, anxiety, fear of not being believed, anger, shame, and numbness are all normal responses. These feelings do not mean you are weak — they mean you are human.</div>
-
-        <div class="kb-q">How to take care of yourself right now</div>
-        <div class="kb-a">Talk to someone you trust — a friend, family member, or counsellor. Write down what happened while it is fresh. Avoid being alone with the person who harassed you. Know that you have options and support.</div>
-
         <div class="kb-q">When should I seek professional help?</div>
-        <div class="kb-a">If you are experiencing trouble sleeping, panic attacks, inability to focus at work, or thoughts of self-harm — please reach out to a mental health professional immediately. Free counselling is available through the helplines in this portal.</div>
-
-        <div class="kb-q">What if I'm not sure what happened to me counts as harassment?</div>
-        <div class="kb-a">If it made you feel uncomfortable, unsafe, or threatened — it matters. You do not need to be certain about the legal definition to reach out. Counsellors and legal advisors on the helpline can help you understand your situation.</div>
+        <div class="kb-a">If you experience trouble sleeping, panic attacks, inability to focus, or thoughts of self-harm — reach out to the EAP counsellor immediately. Contact details are in the Support Contacts section.</div>
       </div>
     </div>
 
-    <!-- ── SECTION 3: FAQ ── -->
     <div class="kb-section">
       <div class="kb-section-header" onclick="toggleKB('kb-faq')">
         <div class="kb-icon">❓</div>
@@ -1019,229 +997,154 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="kb-toggle" id="kb-faq-toggle">▼</div>
       </div>
       <div class="kb-content open" id="kb-faq">
-
         <div class="kb-q">Will anyone find out that I reported?</div>
-        <div class="kb-a">Not through SafeVoice AI. Your identity is never stored — only a case token. Even system administrators cannot link your token to your name. The ICC is legally required to maintain confidentiality.</div>
-
+        <div class="kb-a">Not through SafeVoice AI. Your identity is never stored — only a case token. Even system administrators cannot link your token to your name.</div>
         <div class="kb-q">What if the accused is more senior than me?</div>
-        <div class="kb-a">The POSH Act protects you regardless of the accused person's seniority, influence, or position. The ICC is legally required to be independent of the management hierarchy.</div>
-
-        <div class="kb-q">What if I am a contractual employee or intern?</div>
-        <div class="kb-a">You are fully protected under the POSH Act. Contractual employees, interns, consultants, and temporary staff all have the same rights as permanent employees.</div>
-
+        <div class="kb-a">The POSH Act protects you regardless of the accused person's seniority. The ICC is legally required to be independent of the management hierarchy.</div>
         <div class="kb-q">What if I have no evidence?</div>
-        <div class="kb-a">Your testimony is evidence. You do not need audio recordings or messages to file a complaint. Witness statements, your own account, and patterns of behaviour all count. ICC is obligated to investigate based on your complaint alone.</div>
-
-        <div class="kb-q">What happens to the accused during the investigation?</div>
-        <div class="kb-a">The accused continues working unless you request interim relief. You can request a transfer, work-from-home arrangement, or ask that the accused be kept away from your workspace during the 90-day inquiry.</div>
-
-        <div class="kb-q">Can a man file a POSH complaint?</div>
-        <div class="kb-a">Under the current POSH Act 2013, the law specifically protects women employees. However, many companies have internal policies that extend protection to all genders. Check your company's HR policy or consult a legal helpline.</div>
-
-        <div class="kb-q">What if my ICC is not following the process?</div>
-        <div class="kb-a">You can escalate to the employer, file a complaint with the District Officer, or approach a court. SafeVoice AI's process monitoring detects ICC violations in real time — your case history is timestamped evidence of any process failure.</div>
-
+        <div class="kb-a">Your testimony is evidence. You do not need recordings or messages to file a complaint. ICC is obligated to investigate based on your account alone.</div>
+        <div class="kb-q">What happens to the accused during investigation?</div>
+        <div class="kb-a">The accused continues working unless you request interim relief — transfer, work from home, or distance from your workspace during the 90-day inquiry.</div>
         <div class="kb-q">How long does the process take?</div>
-        <div class="kb-a">The ICC must complete its inquiry within 90 days of receiving your complaint. It must then submit a report to the employer within 10 days of completion. The employer must act within 60 days of receiving the report.</div>
+        <div class="kb-a">ICC must complete inquiry within 90 days, submit report within 10 days, and the employer must act within 60 days of receiving the report.</div>
       </div>
     </div>
 
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
-      <button class="btn-primary" onclick="showScreen('screen-helplines')">📞 View Helplines & Support →</button>
+      <button class="btn-primary" onclick="showScreen('screen-helplines')">📞 Support Contacts →</button>
       <button class="btn-secondary" onclick="showScreen('screen-intro')">← Back to Home</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ SCREEN 10: HELPLINES ═══════════════════════════ -->
+<!-- SCREEN: INTERNAL CONTACTS -->
 <div id="screen-helplines" class="screen">
   <div class="container">
-    <div class="section-label">HELPLINES & SUPPORT</div>
-    <div class="section-title">You Are Not Alone</div>
-    <div class="section-sub">Verified helplines for legal aid, mental health, and emergency support. Click "Register Call to My Case" before calling — your call will be anonymously logged to your case token.</div>
+    <div class="section-label">INTERNAL SUPPORT CONTACTS</div>
+    <div class="section-title">Who Can Help You</div>
+    <div class="section-sub">Reach the right person within your organisation. All contacts are bound by strict confidentiality under the POSH Act 2013. Use your case token as your only reference — no name needed.</div>
 
-    <div class="alert warning">
+    <div class="alert info">
       <span>🔒</span>
-      <span>When you register a call, only the timestamp and helpline name are logged — never your phone number or personal identity. Give your <strong>case token as your reference</strong> when speaking to the helpline.</span>
+      <span>When contacting any team below, give only your <strong>case token as reference</strong>. You are never required to give your name.</span>
     </div>
 
-    <!-- Token Entry for Call Logging -->
     <div class="status-card" style="margin-bottom:20px;">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:200px;">
-          <label style="font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1px;display:block;margin-bottom:6px;">YOUR CASE TOKEN (for call logging)</label>
-          <input type="text" id="helpline-token" placeholder="SV-XXXX-XXXX-XXXX  or  leave blank for new case"
-            style="width:100%;background:var(--navy-mid);border:1.5px solid rgba(11,158,138,0.3);border-radius:8px;color:var(--white);font-size:15px;padding:10px 14px;font-family:'Courier New',monospace;letter-spacing:1px;"/>
-        </div>
-        <div style="font-size:12px;color:var(--muted);max-width:200px;line-height:1.5;">If you have no token yet, calls are still logged anonymously with a new reference.</div>
-      </div>
+      <label style="font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1px;display:block;margin-bottom:8px;">YOUR CASE TOKEN (reference when contacting)</label>
+      <input type="text" id="helpline-token" placeholder="SV-XXXX-XXXX-XXXX"
+        style="width:100%;background:var(--navy-mid);border:1.5px solid rgba(11,158,138,0.3);border-radius:8px;color:var(--white);font-size:15px;padding:10px 14px;font-family:'Courier New',monospace;letter-spacing:1px;"/>
     </div>
 
-    <!-- ── EMERGENCY ── -->
-    <div style="margin-bottom:6px;"><span style="font-size:11px;color:var(--coral);font-weight:700;letter-spacing:2px;">EMERGENCY</span></div>
-
-    <div class="helpline-card" style="border-color:rgba(192,57,43,0.3);">
-      <div class="helpline-top">
-        <div class="helpline-icon">🚨</div>
-        <div class="helpline-info">
-          <h4>National Emergency — Police</h4>
-          <p>Immediate physical danger, assault, or life threat. Available 24/7.</p>
-        </div>
-        <div style="text-align:right;">
-          <div class="helpline-number" style="color:#E74C3C;">112</div>
-          <div class="helpline-hours">24 × 7 · Pan India</div>
-        </div>
-      </div>
-      <div class="helpline-actions">
-        <a class="call-btn" href="tel:112" style="background:var(--red);">📞 Call 112</a>
-        <button class="register-btn" onclick="registerCall('National Emergency 112','112','hl-emergency')" style="border-color:var(--red);color:var(--red);">Log this call to my case</button>
-        <div class="registered-badge" id="hl-emergency">✅ Call logged to your case</div>
-      </div>
-    </div>
-
-    <!-- ── WOMEN'S HELPLINES ── -->
-    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:2px;">WOMEN'S HELPLINES</span></div>
-
-    <div class="helpline-card">
-      <div class="helpline-top">
-        <div class="helpline-icon">👩</div>
-        <div class="helpline-info">
-          <h4>Women Helpline — National</h4>
-          <p>Government helpline for women in distress. Counselling, legal guidance, and referrals to local support services.</p>
-        </div>
-        <div style="text-align:right;">
-          <div class="helpline-number">1091</div>
-          <div class="helpline-hours">24 × 7 · Pan India</div>
-        </div>
-      </div>
-      <div class="helpline-actions">
-        <a class="call-btn" href="tel:1091">📞 Call 1091</a>
-        <button class="register-btn" onclick="registerCall('Women Helpline 1091','1091','hl-women1')">Log this call to my case</button>
-        <div class="registered-badge" id="hl-women1">✅ Call logged to your case</div>
-      </div>
-    </div>
-
-    <div class="helpline-card">
-      <div class="helpline-top">
-        <div class="helpline-icon">🛡️</div>
-        <div class="helpline-info">
-          <h4>Nirbhaya — Women Safety Helpline</h4>
-          <p>Dedicated helpline for safety concerns, workplace harassment, and emergency response coordination.</p>
-        </div>
-        <div style="text-align:right;">
-          <div class="helpline-number">181</div>
-          <div class="helpline-hours">24 × 7 · Pan India</div>
-        </div>
-      </div>
-      <div class="helpline-actions">
-        <a class="call-btn" href="tel:181">📞 Call 181</a>
-        <button class="register-btn" onclick="registerCall('Nirbhaya Helpline 181','181','hl-nirbhaya')">Log this call to my case</button>
-        <div class="registered-badge" id="hl-nirbhaya">✅ Call logged to your case</div>
-      </div>
-    </div>
-
-    <!-- ── LEGAL AID ── -->
-    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:var(--teal);font-weight:700;letter-spacing:2px;">FREE LEGAL AID</span></div>
-
-    <div class="helpline-card">
+    <div style="margin-bottom:6px;"><span style="font-size:11px;color:var(--teal);font-weight:700;letter-spacing:2px;">INTERNAL COMPLAINTS COMMITTEE (ICC)</span></div>
+    <div class="helpline-card" style="border-color:rgba(11,158,138,0.3);">
       <div class="helpline-top">
         <div class="helpline-icon">⚖️</div>
         <div class="helpline-info">
-          <h4>National Legal Services Authority (NALSA)</h4>
-          <p>Free legal aid and advice for all citizens. Can help with POSH complaints, FIR filing, and understanding your rights. Completely free of charge.</p>
+          <h4>POSH Committee — ICC</h4>
+          <p>First point of contact for filing or following up on a complaint. Independent of HR and management. Legally bound to maintain confidentiality.</p>
         </div>
         <div style="text-align:right;">
-          <div class="helpline-number">15100</div>
-          <div class="helpline-hours">Mon–Sat · 9 AM–5 PM</div>
+          <div class="helpline-number">9999999999</div>
+          <div class="helpline-hours">Mon–Fri · 9 AM–6 PM</div>
         </div>
       </div>
+      <div style="background:var(--navy-mid);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);">📧 &nbsp;<span style="color:var(--teal-light);font-family:'Courier New',monospace;">poshcommittee@organisation.com</span></div>
       <div class="helpline-actions">
-        <a class="call-btn" href="tel:15100">📞 Call 15100</a>
-        <button class="register-btn" onclick="registerCall('NALSA Legal Aid 15100','15100','hl-nalsa')">Log this call to my case</button>
-        <div class="registered-badge" id="hl-nalsa">✅ Call logged to your case</div>
+        <a class="call-btn" href="tel:9999999999">📞 Call ICC</a>
+        <button class="register-btn" onclick="registerCall('ICC POSH Committee','9999999999','hl-icc')">Log this call to my case</button>
+        <div class="registered-badge" id="hl-icc">✅ Call logged</div>
       </div>
     </div>
 
+    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:2px;">HUMAN RESOURCES</span></div>
     <div class="helpline-card">
       <div class="helpline-top">
-        <div class="helpline-icon">🏛️</div>
+        <div class="helpline-icon">👥</div>
         <div class="helpline-info">
-          <h4>National Commission for Women (NCW)</h4>
-          <p>Statutory body that investigates complaints of violations against women. Can directly intervene with employers and authorities on your behalf.</p>
+          <h4>HR Head — Confidential Line</h4>
+          <p>For interim relief requests — transfer, work from home, or keeping distance from the accused during investigation.</p>
         </div>
         <div style="text-align:right;">
-          <div class="helpline-number">7827170170</div>
-          <div class="helpline-hours">Mon–Sat · 9 AM–5:30 PM</div>
+          <div class="helpline-number">9999999998</div>
+          <div class="helpline-hours">Mon–Fri · 9 AM–6 PM</div>
         </div>
       </div>
+      <div style="background:var(--navy-mid);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);">📧 &nbsp;<span style="color:var(--teal-light);font-family:'Courier New',monospace;">hrhead@organisation.com</span></div>
       <div class="helpline-actions">
-        <a class="call-btn" href="tel:7827170170">📞 Call NCW</a>
-        <button class="register-btn" onclick="registerCall('National Commission for Women','7827170170','hl-ncw')">Log this call to my case</button>
-        <div class="registered-badge" id="hl-ncw">✅ Call logged to your case</div>
+        <a class="call-btn" href="tel:9999999998">📞 Call HR Head</a>
+        <button class="register-btn" onclick="registerCall('HR Head','9999999998','hl-hr')">Log this call to my case</button>
+        <div class="registered-badge" id="hl-hr">✅ Call logged</div>
       </div>
     </div>
 
-    <!-- ── MENTAL HEALTH ── -->
-    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:var(--purple,#7B5EA7);font-weight:700;letter-spacing:2px;">MENTAL HEALTH & COUNSELLING</span></div>
-
+    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:#7B5EA7;font-weight:700;letter-spacing:2px;">EMPLOYEE WELLBEING</span></div>
     <div class="helpline-card">
       <div class="helpline-top">
         <div class="helpline-icon">💚</div>
         <div class="helpline-info">
-          <h4>iCall — Tata Institute of Social Sciences</h4>
-          <p>Professional psychological counselling by trained counsellors. Confidential, affordable, and available in English, Hindi, and regional languages.</p>
+          <h4>Employee Assistance Programme (EAP)</h4>
+          <p>Confidential counselling by a qualified professional. Independent of HR and management. Sessions are private and not reported to the company.</p>
         </div>
         <div style="text-align:right;">
-          <div class="helpline-number">9152987821</div>
-          <div class="helpline-hours">Mon–Sat · 8 AM–10 PM</div>
+          <div class="helpline-number">9999999997</div>
+          <div class="helpline-hours">Mon–Sat · 8 AM–8 PM</div>
         </div>
       </div>
+      <div style="background:var(--navy-mid);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);">📧 &nbsp;<span style="color:var(--teal-light);font-family:'Courier New',monospace;">eap@organisation.com</span></div>
       <div class="helpline-actions">
-        <a class="call-btn" href="tel:9152987821" style="background:#5B2C8D;">📞 Call iCall</a>
-        <button class="register-btn" onclick="registerCall('iCall TISS Counselling','9152987821','hl-icall')" style="border-color:#7B5EA7;color:#7B5EA7;">Log this call to my case</button>
-        <div class="registered-badge" id="hl-icall">✅ Call logged to your case</div>
+        <a class="call-btn" href="tel:9999999997" style="background:#5B2C8D;">📞 Call EAP</a>
+        <button class="register-btn" onclick="registerCall('EAP','9999999997','hl-eap')" style="border-color:#7B5EA7;color:#7B5EA7;">Log this call to my case</button>
+        <div class="registered-badge" id="hl-eap">✅ Call logged</div>
       </div>
     </div>
 
+    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:var(--coral);font-weight:700;letter-spacing:2px;">SECURITY & EMERGENCY</span></div>
+    <div class="helpline-card" style="border-color:rgba(192,57,43,0.2);">
+      <div class="helpline-top">
+        <div class="helpline-icon">🔐</div>
+        <div class="helpline-info">
+          <h4>Office Security — Emergency Response</h4>
+          <p>For immediate physical safety concerns within office premises. Available round the clock.</p>
+        </div>
+        <div style="text-align:right;">
+          <div class="helpline-number" style="color:#E74C3C;">9999999996</div>
+          <div class="helpline-hours">24 × 7 · All locations</div>
+        </div>
+      </div>
+      <div style="background:var(--navy-mid);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);">📧 &nbsp;<span style="color:var(--teal-light);font-family:'Courier New',monospace;">security@organisation.com</span></div>
+      <div class="helpline-actions">
+        <a class="call-btn" href="tel:9999999996" style="background:var(--red);">📞 Call Security</a>
+        <button class="register-btn" onclick="registerCall('Office Security','9999999996','hl-security')" style="border-color:var(--red);color:var(--red);">Log this call to my case</button>
+        <div class="registered-badge" id="hl-security">✅ Call logged</div>
+      </div>
+    </div>
+
+    <div style="margin:20px 0 6px;"><span style="font-size:11px;color:#2E86AB;font-weight:700;letter-spacing:2px;">LEGAL & COMPLIANCE</span></div>
     <div class="helpline-card">
       <div class="helpline-top">
-        <div class="helpline-icon">🧠</div>
+        <div class="helpline-icon">🏛️</div>
         <div class="helpline-info">
-          <h4>Vandrevala Foundation — Mental Health Helpline</h4>
-          <p>Free 24/7 mental health support. Trained counsellors for crisis intervention, trauma support, and ongoing emotional support.</p>
+          <h4>Legal & Compliance Team</h4>
+          <p>For questions about legal rights, process escalation, or if you believe the ICC process has been compromised.</p>
         </div>
         <div style="text-align:right;">
-          <div class="helpline-number">1860-2662-345</div>
-          <div class="helpline-hours">24 × 7 · Pan India</div>
+          <div class="helpline-number">9999999995</div>
+          <div class="helpline-hours">Mon–Fri · 10 AM–5 PM</div>
         </div>
       </div>
+      <div style="background:var(--navy-mid);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);">📧 &nbsp;<span style="color:var(--teal-light);font-family:'Courier New',monospace;">legal@organisation.com</span></div>
       <div class="helpline-actions">
-        <a class="call-btn" href="tel:18602662345" style="background:#5B2C8D;">📞 Call Vandrevala</a>
-        <button class="register-btn" onclick="registerCall('Vandrevala Mental Health','18602662345','hl-vandrevala')" style="border-color:#7B5EA7;color:#7B5EA7;">Log this call to my case</button>
-        <div class="registered-badge" id="hl-vandrevala">✅ Call logged to your case</div>
+        <a class="call-btn" href="tel:9999999995" style="background:#185FA5;">📞 Call Legal</a>
+        <button class="register-btn" onclick="registerCall('Legal and Compliance','9999999995','hl-legal')" style="border-color:#2E86AB;color:#2E86AB;">Log this call to my case</button>
+        <div class="registered-badge" id="hl-legal">✅ Call logged</div>
       </div>
     </div>
 
-    <div class="helpline-card">
-      <div class="helpline-top">
-        <div class="helpline-icon">🌸</div>
-        <div class="helpline-info">
-          <h4>Snehi — Emotional Support Helpline</h4>
-          <p>Empathetic listening and emotional support for those going through trauma, distress, or difficult life situations.</p>
-        </div>
-        <div style="text-align:right;">
-          <div class="helpline-number">044-24640050</div>
-          <div class="helpline-hours">Mon–Sat · 8 AM–10 PM</div>
-        </div>
-      </div>
-      <div class="helpline-actions">
-        <a class="call-btn" href="tel:04424640050" style="background:#5B2C8D;">📞 Call Snehi</a>
-        <button class="register-btn" onclick="registerCall('Snehi Emotional Support','04424640050','hl-snehi')" style="border-color:#7B5EA7;color:#7B5EA7;">Log this call to my case</button>
-        <div class="registered-badge" id="hl-snehi">✅ Call logged to your case</div>
-      </div>
+    <div class="alert info" style="margin-top:8px;">
+      <span>🔒</span>
+      <span>All internal contacts are legally bound by POSH Act 2013 confidentiality. Any breach is itself a punishable offence under the Act.</span>
     </div>
 
-    <!-- Bottom nav -->
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
       <button class="btn-secondary" onclick="showScreen('screen-knowledge')">📚 Knowledge Hub</button>
       <button class="btn-secondary" onclick="showScreen('screen-intro')">← Back to Home</button>
@@ -1249,365 +1152,38 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
-<!-- ═══════════════════════════ CALL LOG MODAL ═══════════════════════════ -->
+<!-- CALL LOG MODAL -->
 <div class="modal-overlay" id="call-modal">
   <div class="modal-box">
     <div style="font-size:40px;margin-bottom:12px;">📞</div>
     <h3>Call Registered Anonymously</h3>
-    <p>This call has been logged to your case. When the helpline answers, give them your case token as your reference number — not your name.</p>
+    <p>When the team answers, give them your case token as your reference — not your name.</p>
     <div class="modal-token-display" id="modal-token-text">SV-XXXX-XXXX-XXXX</div>
-    <div class="modal-privacy">
-      🔒 What was logged: Helpline name · Timestamp · Your case token<br/>
-      ❌ Not logged: Your phone number · Your name · Your identity<br/>
-      📋 Tell the helpline: "My reference is <span id="modal-token-inline">SV-XXXX</span>"
-    </div>
+    <div class="modal-privacy">🔒 Logged: Helpline name · Timestamp · Case token<br/>❌ Not logged: Your phone number · Your name · Your identity</div>
     <div class="modal-actions">
-      <button class="btn-primary" id="modal-call-btn" onclick="closeModal()">Got it — I'll call now</button>
+      <button class="btn-primary" id="modal-call-btn" onclick="closeModal()">Got it</button>
       <button class="btn-secondary" onclick="closeModal()">Close</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── KNOWLEDGE ACCORDION ──
 function toggleKB(id) {
-  const el = document.getElementById(id);
-  const tg = document.getElementById(id + '-toggle');
-  if (el.classList.contains('open')) {
-    el.classList.remove('open'); tg.textContent = '▼';
-  } else {
-    el.classList.add('open'); tg.textContent = '▲';
-  }
+  const el=document.getElementById(id); const tg=document.getElementById(id+'-toggle');
+  if(el.classList.contains('open')){ el.classList.remove('open'); tg.textContent='▼'; }
+  else{ el.classList.add('open'); tg.textContent='▲'; }
 }
-
-// ── CALL REGISTRATION ──
-function registerCall(helplineName, number, badgeId) {
-  const tokenInput = document.getElementById('helpline-token');
-  let token = tokenInput ? tokenInput.value.trim() : '';
-
-  // If no token entered — generate a new anonymous reference
-  if (!token || token.length < 5) {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    token = 'SV-';
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) token += chars[Math.floor(Math.random() * chars.length)];
-      if (i < 3) token += '-';
-    }
-    if (tokenInput) tokenInput.value = token;
+function registerCall(name, number, badgeId) {
+  let token=document.getElementById('helpline-token')?.value.trim()||'';
+  if(!token||token.length<5){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; token='SV-';
+    for(let i=0;i<4;i++){for(let j=0;j<4;j++) token+=chars[Math.floor(Math.random()*chars.length)]; if(i<3) token+='-';}
+    const inp=document.getElementById('helpline-token'); if(inp) inp.value=token;
   }
-
-  // Log call (in production: POST to /api/log-call with token + helpline)
-  const callLog = {
-    token,
-    helpline: helplineName,
-    number,
-    timestamp: new Date().toISOString(),
-    type: 'outgoing_registered'
-  };
-  console.log('[SafeVoice] Call registered:', callLog);
-
-  // Show registered badge
-  const badge = document.getElementById(badgeId);
-  if (badge) { badge.style.display = 'flex'; }
-
-  // Show modal
-  document.getElementById('modal-token-text').textContent = token;
-  document.getElementById('modal-token-inline').textContent = token;
-  document.getElementById('modal-call-btn').onclick = () => {
-    window.location.href = 'tel:' + number;
-    closeModal();
-  };
+  const badge=document.getElementById(badgeId); if(badge) badge.style.display='flex';
+  document.getElementById('modal-token-text').textContent=token;
   document.getElementById('call-modal').classList.add('open');
 }
-
-function closeModal() {
-  document.getElementById('call-modal').classList.remove('open');
-}
-
-// Close modal on overlay click
-document.getElementById('call-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-</script>
-<!-- ═══ LEADERSHIP DASHBOARD SCREEN ═══ -->
-<style>
-.sv-dash-screen{font-family:'Segoe UI',Arial,sans-serif;padding:0 0 2rem;}
-.sv-dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:8px;}
-.sv-dash-topbar h2{font-size:17px;font-weight:700;color:var(--white);margin:0;}
-.sv-anon-badge{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(11,158,138,0.15);color:var(--teal-light);border:1px solid rgba(11,158,138,0.3);}
-.sv-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.2rem;}
-.sv-filt{font-size:12px;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--muted);cursor:pointer;transition:all 0.2s;}
-.sv-filt.active{background:rgba(11,158,138,0.2);color:var(--teal-light);border-color:var(--teal);}
-.sv-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.2rem;}
-.sv-metric{background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:14px 16px;}
-.sv-metric .ml{font-size:11px;color:var(--muted);margin-bottom:6px;}
-.sv-metric .mv{font-size:22px;font-weight:700;color:var(--white);}
-.sv-metric .md{font-size:11px;margin-top:4px;}
-.md-up{color:var(--coral);}
-.md-dn{color:var(--green);}
-.md-neu{color:var(--muted);}
-.sv-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.2rem;}
-@media(max-width:540px){.sv-2col{grid-template-columns:1fr;}}
-.sv-card{background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;}
-.sv-card-title{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:1.5px;margin-bottom:12px;text-transform:uppercase;}
-.rg-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
-.rg-name{font-size:12px;color:var(--off-white);width:82px;flex-shrink:0;}
-.rg-bar-wrap{flex:1;background:var(--navy-mid);border-radius:3px;height:7px;overflow:hidden;}
-.rg-bar{height:7px;border-radius:3px;transition:width 0.5s ease;}
-.rg-val{font-size:12px;font-weight:700;width:28px;text-align:right;flex-shrink:0;}
-.rg-pill{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;flex-shrink:0;}
-.rg-high{background:rgba(192,57,43,0.2);color:#E74C3C;}
-.rg-med {background:rgba(245,166,35,0.2);color:var(--gold);}
-.rg-low {background:rgba(26,154,90,0.2);color:#4ADE80;}
-.camp-item{background:var(--navy-mid);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:13px 14px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px;}
-.camp-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.camp-bd{flex:1;}
-.camp-bd h4{font-size:13px;font-weight:700;color:var(--white);margin:0 0 3px;}
-.camp-bd p{font-size:11px;color:var(--muted);margin:0 0 7px;line-height:1.5;}
-.camp-tags{display:flex;gap:5px;flex-wrap:wrap;}
-.camp-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--navy-card);color:var(--muted);}
-.camp-act{font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--teal);color:var(--teal);background:transparent;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
-.camp-act:hover{background:rgba(11,158,138,0.15);}
-.sv-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
-.sv-row:last-child{border-bottom:none;}
-.sv-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.sv-qtext{font-size:12px;color:var(--off-white);flex:1;}
-.sv-sbar-wrap{width:72px;background:var(--navy-mid);border-radius:3px;height:5px;overflow:hidden;flex-shrink:0;}
-.sv-sbar{height:5px;border-radius:3px;}
-.sv-sval{font-size:12px;font-weight:700;width:30px;text-align:right;flex-shrink:0;}
-</style>
-
-<div id="screen-dashboard" class="screen">
-  <div class="container">
-    <div class="sv-dash-screen">
-
-      <div class="sv-dash-topbar">
-        <div>
-          <div class="section-label">LEADERSHIP PANEL</div>
-          <div class="section-title" style="margin-bottom:0;">Safety Intelligence Dashboard</div>
-        </div>
-        <span class="sv-anon-badge">🔒 Anonymized · No individual data visible</span>
-      </div>
-
-      <!-- Region filters -->
-      <div class="sv-filters" id="sv-filters">
-        <button class="sv-filt active" onclick="svFilter(this,'All')">All regions</button>
-        <button class="sv-filt" onclick="svFilter(this,'Bangalore')">Bangalore</button>
-        <button class="sv-filt" onclick="svFilter(this,'Hyderabad')">Hyderabad</button>
-        <button class="sv-filt" onclick="svFilter(this,'Mumbai')">Mumbai</button>
-        <button class="sv-filt" onclick="svFilter(this,'Delhi')">Delhi</button>
-        <button class="sv-filt" onclick="svFilter(this,'Chennai')">Chennai</button>
-      </div>
-
-      <!-- Metrics -->
-      <div class="sv-metrics">
-        <div class="sv-metric">
-          <div class="ml">Overall trust score</div>
-          <div class="mv" id="sv-trust">62</div>
-          <div class="md md-dn">↑ +4 this quarter</div>
-        </div>
-        <div class="sv-metric">
-          <div class="ml">Reports this quarter</div>
-          <div class="mv" id="sv-reports">18</div>
-          <div class="md md-up">↑ 3 vs last quarter</div>
-        </div>
-        <div class="sv-metric">
-          <div class="ml">Avg resolution time</div>
-          <div class="mv" id="sv-res">34d</div>
-          <div class="md md-dn">↓ 12d faster</div>
-        </div>
-        <div class="sv-metric">
-          <div class="ml">ICC compliance</div>
-          <div class="mv" id="sv-comp">78%</div>
-          <div class="md md-dn">↑ +11% this quarter</div>
-        </div>
-        <div class="sv-metric">
-          <div class="ml">SOS alerts raised</div>
-          <div class="mv" id="sv-sos">3</div>
-          <div class="md md-neu">All within SLA</div>
-        </div>
-      </div>
-
-      <div class="sv-2col">
-
-        <!-- Trust by region -->
-        <div class="sv-card">
-          <div class="sv-card-title">Trust score by region</div>
-          <div class="rg-row">
-            <div class="rg-name">Bangalore</div>
-            <div class="rg-bar-wrap"><div class="rg-bar" style="width:72%;background:#1A9A5A;"></div></div>
-            <div class="rg-val" style="color:#4ADE80;">72</div>
-            <span class="rg-pill rg-low">Low</span>
-          </div>
-          <div class="rg-row">
-            <div class="rg-name">Hyderabad</div>
-            <div class="rg-bar-wrap"><div class="rg-bar" style="width:58%;background:var(--gold);"></div></div>
-            <div class="rg-val" style="color:var(--gold);">58</div>
-            <span class="rg-pill rg-med">Medium</span>
-          </div>
-          <div class="rg-row">
-            <div class="rg-name">Mumbai</div>
-            <div class="rg-bar-wrap"><div class="rg-bar" style="width:44%;background:#E74C3C;"></div></div>
-            <div class="rg-val" style="color:#E74C3C;">44</div>
-            <span class="rg-pill rg-high">High</span>
-          </div>
-          <div class="rg-row">
-            <div class="rg-name">Delhi</div>
-            <div class="rg-bar-wrap"><div class="rg-bar" style="width:67%;background:#1A9A5A;"></div></div>
-            <div class="rg-val" style="color:#4ADE80;">67</div>
-            <span class="rg-pill rg-low">Low</span>
-          </div>
-          <div class="rg-row">
-            <div class="rg-name">Chennai</div>
-            <div class="rg-bar-wrap"><div class="rg-bar" style="width:51%;background:var(--gold);"></div></div>
-            <div class="rg-val" style="color:var(--gold);">51</div>
-            <span class="rg-pill rg-med">Medium</span>
-          </div>
-        </div>
-
-        <!-- Survey scores -->
-        <div class="sv-card">
-          <div class="sv-card-title">Safety pulse survey scores</div>
-          <div class="sv-row">
-            <div class="sv-dot" style="background:#E74C3C;"></div>
-            <div class="sv-qtext">I feel safe reporting concerns</div>
-            <div class="sv-sbar-wrap"><div class="sv-sbar" style="width:52%;background:#E74C3C;"></div></div>
-            <div class="sv-sval" style="color:#E74C3C;">52%</div>
-          </div>
-          <div class="sv-row">
-            <div class="sv-dot" style="background:var(--gold);"></div>
-            <div class="sv-qtext">I trust the ICC process</div>
-            <div class="sv-sbar-wrap"><div class="sv-sbar" style="width:58%;background:var(--gold);"></div></div>
-            <div class="sv-sval" style="color:var(--gold);">58%</div>
-          </div>
-          <div class="sv-row">
-            <div class="sv-dot" style="background:var(--gold);"></div>
-            <div class="sv-qtext">I know my POSH Act rights</div>
-            <div class="sv-sbar-wrap"><div class="sv-sbar" style="width:61%;background:var(--gold);"></div></div>
-            <div class="sv-sval" style="color:var(--gold);">61%</div>
-          </div>
-          <div class="sv-row">
-            <div class="sv-dot" style="background:#1A9A5A;"></div>
-            <div class="sv-qtext">My manager treats everyone fairly</div>
-            <div class="sv-sbar-wrap"><div class="sv-sbar" style="width:74%;background:#1A9A5A;"></div></div>
-            <div class="sv-sval" style="color:#4ADE80;">74%</div>
-          </div>
-          <div class="sv-row">
-            <div class="sv-dot" style="background:#E74C3C;"></div>
-            <div class="sv-qtext">I'd use an anonymous tool</div>
-            <div class="sv-sbar-wrap"><div class="sv-sbar" style="width:48%;background:#E74C3C;"></div></div>
-            <div class="sv-sval" style="color:#E74C3C;">48%</div>
-          </div>
-          <div style="margin-top:10px;font-size:10px;color:var(--muted);padding:8px 10px;background:var(--navy-mid);border-radius:6px;">
-            🔒 Individual responses never visible — aggregated scores only
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Campaign engine -->
-      <div class="sv-card" style="margin-bottom:1.2rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-          <div class="sv-card-title" style="margin:0;">Phi-4 recommended campaigns</div>
-          <span style="font-size:10px;color:var(--muted);">Auto-generated · Based on risk signals</span>
-        </div>
-
-        <div class="camp-item">
-          <div class="camp-ico" style="background:rgba(192,57,43,0.2);">🎤</div>
-          <div class="camp-bd">
-            <h4>HR roadshow — Mumbai</h4>
-            <p>Trust dropped 8pts. 3 reports from Finance. In-person awareness session recommended within 30 days.</p>
-            <div class="camp-tags">
-              <span class="camp-tag">🔴 High priority</span>
-              <span class="camp-tag">Mumbai · Finance</span>
-              <span class="camp-tag">In-person · 2 hrs</span>
-            </div>
-          </div>
-          <button class="camp-act">Schedule</button>
-        </div>
-
-        <div class="camp-item">
-          <div class="camp-ico" style="background:rgba(123,94,167,0.2);">💚</div>
-          <div class="camp-bd">
-            <h4>Mental wellness session — Chennai &amp; Hyderabad</h4>
-            <p>Psychological safety scores below threshold. External counsellor session recommended this quarter.</p>
-            <div class="camp-tags">
-              <span class="camp-tag">🟡 Medium priority</span>
-              <span class="camp-tag">Chennai · Hyderabad</span>
-              <span class="camp-tag">Virtual or in-person</span>
-            </div>
-          </div>
-          <button class="camp-act">Schedule</button>
-        </div>
-
-        <div class="camp-item">
-          <div class="camp-ico" style="background:rgba(11,158,138,0.2);">📋</div>
-          <div class="camp-bd">
-            <h4>Employee safety survey — all locations</h4>
-            <p>Last org-wide survey was 9 months ago. Pulse survey recommended to re-baseline trust scores.</p>
-            <div class="camp-tags">
-              <span class="camp-tag">📅 Scheduled</span>
-              <span class="camp-tag">All locations</span>
-              <span class="camp-tag">Anonymous · 5 min</span>
-            </div>
-          </div>
-          <button class="camp-act">Launch</button>
-        </div>
-
-        <div class="camp-item">
-          <div class="camp-ico" style="background:rgba(26,154,90,0.2);">⚖️</div>
-          <div class="camp-bd">
-            <h4>ICC compliance training — Mumbai &amp; Chennai</h4>
-            <p>2 ICC timeline violations detected. Mandatory POSH Act process refresher for ICC members.</p>
-            <div class="camp-tags">
-              <span class="camp-tag">✅ Compliance</span>
-              <span class="camp-tag">ICC members only</span>
-              <span class="camp-tag">Online · 1 hr</span>
-            </div>
-          </div>
-          <button class="camp-act">Assign</button>
-        </div>
-      </div>
-
-      <button class="btn-secondary" onclick="showScreen('screen-intro')">← Back to Home</button>
-
-    </div>
-  </div>
-</div>
-
-<script>
-const svData = {
-  All:       {trust:62,reports:18,res:'34d',comp:'78%',sos:3},
-  Bangalore: {trust:72,reports:4, res:'28d',comp:'91%',sos:0},
-  Hyderabad: {trust:58,reports:3, res:'38d',comp:'74%',sos:1},
-  Mumbai:    {trust:44,reports:6, res:'41d',comp:'62%',sos:2},
-  Delhi:     {trust:67,reports:3, res:'30d',comp:'83%',sos:0},
-  Chennai:   {trust:51,reports:2, res:'36d',comp:'70%',sos:0},
-};
-function svFilter(el, region) {
-  document.querySelectorAll('.sv-filt').forEach(f=>f.classList.remove('active'));
-  el.classList.add('active');
-  const d = svData[region];
-  document.getElementById('sv-trust').textContent   = d.trust;
-  document.getElementById('sv-reports').textContent = d.reports;
-  document.getElementById('sv-res').textContent     = d.res;
-  document.getElementById('sv-comp').textContent    = d.comp;
-  document.getElementById('sv-sos').textContent     = d.sos;
-}
-
-// Add dashboard link to intro screen
-window.addEventListener('DOMContentLoaded', () => {
-  const hero = document.querySelector('.intro-hero');
-  if (hero) {
-    const existing = hero.querySelectorAll('div[style*="display:flex"]');
-    const lastDiv  = existing[existing.length - 1];
-    const btn      = document.createElement('button');
-    btn.className  = 'btn-secondary';
-    btn.style.cssText = 'font-size:13px;padding:10px 22px;margin-top:8px;';
-    btn.textContent = '📊 Leadership Dashboard';
-    btn.onclick = () => showScreen('screen-dashboard');
-    if (lastDiv) { lastDiv.appendChild(btn); }
-    else { hero.appendChild(btn); }
-  }
-});
+function closeModal(){ document.getElementById('call-modal').classList.remove('open'); }
+document.getElementById('call-modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
 </script>
