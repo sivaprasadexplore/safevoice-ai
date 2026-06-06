@@ -78,6 +78,27 @@ Access code: SafeVoice2026
 ```
 > **Demo note:** The access code is for hackathon submission only.
 > The actual SafeVoice AI application requires **no login** — fully anonymous by design.
+Running with Real Azure AI (For Judges)
+To see real Microsoft Phi-4 and Azure Speech-to-Text in action:
+Step 1 — Add your Azure keys to `.env`:
+```env
+AZURE_PHI_ENDPOINT=https://your-resource.services.ai.azure.com/openai/v1
+AZURE_PHI_KEY=your_key_here
+AZURE_PHI_DEPLOYMENT=Phi-4
+AZURE_SPEECH_KEY=your_speech_key_here
+AZURE_SPEECH_REGION=eastus
+```
+Step 2 — Set `MOCK_MODE` to `false` in `index.html`:
+```javascript
+// Find this line in index.html (search for MOCK_MODE)
+MOCK_MODE: false,   // ← change from true to false
+```
+Step 3 — Start the server:
+```bash
+node app.js
+```
+Step 4 — Open `http://localhost:3000`, enter password `SafeVoice2026`, upload a WAV audio file or text document — real Phi-4 analysis will appear within seconds.
+> **Note:** `MOCK_MODE: true` is set by default in the repository so the public Netlify demo runs without Azure keys. Set to `false` locally with your own keys for real AI integration.
 ---
 📱 Portal — 9 Screens
 Screen	Purpose
