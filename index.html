@@ -598,6 +598,25 @@
 
 <script>
 // ═══════════════════════════════════════
+// PASSWORD GATE
+// ═══════════════════════════════════════
+(function(){
+  var PASS="SafeVoice2026";
+  var KEY="sv_auth";
+  if(sessionStorage.getItem(KEY)!==PASS){
+    document.body.style.display="none";
+    var entered=prompt("SafeVoice AI - Enter access code to continue:");
+    if(entered!==PASS){
+      document.body.style.display="block";
+      document.body.innerHTML="<div style='font-family:Arial,sans-serif;background:#0D1B2A;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;'><div style='font-size:48px;margin-bottom:20px;'>Shield</div><h2 style='color:#FFFFFF;font-size:22px;margin-bottom:10px;'>Access Denied</h2><p style='color:#8FA8BF;font-size:14px;'>Invalid access code.</p></div>";
+      return;
+    }
+    sessionStorage.setItem(KEY,PASS);
+    document.body.style.display="block";
+  }
+})();
+
+// ═══════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════
 const CONFIG = {
