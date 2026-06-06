@@ -11,67 +11,122 @@ A complaint is filed. The victim is taken to the very person heading the ICC. Pr
 Pillar 1 — Guided Anonymous Reporting
 Conversational AI intake powered by Microsoft Phi-4 — empathetic, not an intimidating form
 Zero login, zero identity stored anywhere
-Evidence upload (audio, video, documents) with chain of custody
+Evidence upload (audio, video, docs) with chain of custody
+Victim confirms all uploads before AI runs — no accidental triggers
+Back navigation — victim can review and edit answers before submitting
 Unique case token — the only link between reporter and case
 Pillar 2 — Evidence Intelligence
-Azure Speech-to-Text transcribes audio/video evidence automatically
-Microsoft Phi-4 analyzes and summarizes what the evidence proves in plain English
-Detects coercive language, pressure tactics, religious coercion patterns
+Azure Speech-to-Text transcribes audio evidence automatically (WAV supported)
+Microsoft Phi-4 analyzes all evidence together — one consolidated summary
+Detects coercive language, career threats, cultural pressure, abuse of power
 Tamper detection via cryptographic hash at upload
-Court-admissible chain-of-custody logging
-Pillar 3 — Retaliation Shield
-Baseline snapshot locked at moment of filing
-Monitors performance ratings, meeting inclusion, system access
-Flags statistically significant deviations post-filing
-Dead man's switch — alerts external compliance officer automatically
+Court-admissible chain-of-custody logging with timestamps
+Pillar 3 — Retaliation Shield + SOS
+SOS alert system with 3 severity levels — hostile, retaliation, emergency
+Two-step confirmation prevents accidental SOS triggers
+Real-time location sharing (GPS or manual) for security team dispatch
+Dead man's switch — auto-escalates if authorities don't respond within SLA
+Panic button for immediate Level 3 alert when victim cannot type
 ---
 🔧 Tech Stack
-Technology	Purpose
-Microsoft Phi-4	Conversational intake + evidence analysis
-Azure Speech-to-Text	Audio/video transcription
-Azure Document Intelligence	PDF and document extraction
-Azure Language Services	Sentiment + coercion detection
-Azure Confidential Computing	Zero-knowledge identity protection
-Azure Monitor & Log Analytics	Retaliation pattern detection
-HTML / CSS / JavaScript	Frontend portal
-Node.js / Express	Backend API server
+Currently Integrated (MVP)
+Technology	Purpose	Evidence
+Microsoft Phi-4	Evidence analysis + conversational intake	`/api/analyze` in app.js
+Azure Speech-to-Text	Audio transcription (WAV)	`/api/transcribe` in app.js
+Node.js / Express	Backend API server	`app.js`
+HTML / CSS / JavaScript	Frontend portal (single-file MVP)	`index.html`
+Planned — Phase 2 & 3
+Technology	Purpose	Phase
+Azure Document Intelligence	PDF and image evidence extraction	Phase 2
+Azure Language Services	Sentiment + coercion pattern scoring	Phase 2
+Azure Confidential Computing	Zero-knowledge identity protection	Phase 2
+Azure Monitor & Log Analytics	Retaliation pattern detection	Phase 3
+Azure Cosmos DB	Case store — token only, no identity	Phase 2
 ---
 🚀 Getting Started
 Prerequisites
 Node.js v18+
-Azure account
 Microsoft Phi-4 deployed via Azure AI Foundry
-Azure Speech Services key
+Azure Speech Services key (East US region)
 Installation
 ```bash
 git clone https://github.com/sivaprasadexplore/safevoice-ai.git
 cd safevoice-ai
 npm install
 cp .env.example .env
-# Add your Azure keys to .env
-npm start
+# Add your Azure keys to .env — see .env.example
+node app.js
 ```
 Environment Variables
+Create a `.env` file — never commit this to GitHub:
 ```env
-# Microsoft Phi-4
-AZURE_PHI_ENDPOINT=https://your-project.services.ai.azure.com/models
+# Microsoft Phi-4 (Azure AI Foundry)
+AZURE_PHI_ENDPOINT=https://your-resource.services.ai.azure.com/openai/v1
 AZURE_PHI_KEY=your_key_here
 AZURE_PHI_DEPLOYMENT=Phi-4
 
-# Azure Speech
+# Azure Speech-to-Text
 AZURE_SPEECH_KEY=your_speech_key_here
 AZURE_SPEECH_REGION=eastus
+
+PORT=3000
 ```
-Quick Demo (No Keys Needed)
+Quick Demo (No Azure Keys Needed)
 Open `index.html` directly in browser — runs in mock mode with realistic demo data.
+```
+Access code: SafeVoice2026
+```
+> **Demo note:** The access code is for hackathon submission only.
+> The actual SafeVoice AI application requires **no login** — fully anonymous by design.
+---
+📱 Portal — 9 Screens
+Screen	Purpose
+Home	Clean entry — Report, Status, SOS, Resources
+Guided Intake	5 Phi-4 guided questions with back navigation
+Evidence Upload	Audio/docs — user confirms before AI analyzes
+Case Token	Anonymous token — no identity linked
+Check Status	Token-based case tracking — no login needed
+SOS Alert	3 severity levels + panic button + location
+Alert Sent	Confirmation + ETA + responders notified
+Knowledge Hub	POSH rights + mental health + FAQ
+Support Contacts	ICC, HR, EAP, Security, Legal — anonymous call log
+---
+🏗️ Architecture
+```
+Victim (Anonymous Browser)
+        │
+        ▼
+┌─────────────────────────┐
+│  SafeVoice AI Portal    │  ← index.html
+│  No login in production │  ← Demo has access code only
+└──────────┬──────────────┘
+           │ REST API
+           ▼
+┌─────────────────────────┐
+│  Node.js / Express      │  ← app.js
+│  Azure keys in .env     │  ← Never in GitHub
+└──────────┬──────────────┘
+           │
+    ┌──────┴──────────┐
+    ▼                 ▼
+Microsoft Phi-4   Azure Speech-to-Text
+(Evidence         (Audio
+ analysis)         transcription)
+```
+---
+🗺️ Roadmap
+Phase	Timeline	Scope
+Phase 1 (MVP)	Now	POSH reporting, Phi-4 evidence analysis, Azure Speech, SOS alerts, case token
+Phase 2	3–6 months	Document Intelligence, financial fraud, whistleblower, multi-language support
+Phase 3	6–12 months	Leadership dashboard, HRMS integration, SEBI auto-reporting, Azure Monitor
 ---
 🔐 Data Privacy
-SafeVoice AI processes only synthetic data in this demonstration. No real personal data has been used.
-In production:
-Victim identity is never stored — only a case token
-Evidence encrypted at rest and in transit via Azure Confidential Computing
-Chain of custody logged for every file access
-Role-based access — only independent ICC members can view cases
+SafeVoice AI processes only synthetic demo data in this submission. No real personal data used.
+Victim identity never stored — case token only
+Evidence files deleted after processing
+Chain of custody logged for every access
+`.env` file with keys is never committed to GitHub
+All demo audio and text is synthetically generated for this submission
 ---
 ⚖️ Legal Framework
 POSH Act 2013 — Prevention of Sexual Harassment at Workplace
@@ -79,21 +134,24 @@ Whistleblowers Protection Act 2014
 IT Act 2000 — Unauthorized access provisions
 SEBI LODR Regulations — Vigil mechanism requirements
 ---
-🗺️ Roadmap
-Phase	Timeline	Scope
-Phase 1 (MVP)	Now	POSH reporting, evidence AI, case token, ICC compliance
-Phase 2	3–6 months	Financial fraud, data misuse, safety violations, multi-language
-Phase 3	6–12 months	Enterprise intelligence, SEBI reporting, HRMS integration
+🏭 Architecture Note
+For the MVP we chose a single-file frontend to maximise build speed during the hackathon. The production version follows a component-based architecture with separate modules for auth, intake, evidence processing, SOS, and the leadership dashboard.
 ---
 🤖 AI Tools Disclosure
 As required by hackathon guidelines:
-GitHub Copilot — Code suggestions
-Claude (Anthropic) — Architecture design and documentation
-Microsoft Phi-4 — Core AI functionality within the application
+Tool	Used For
+GitHub Copilot	Code suggestions
+Claude (Anthropic)	Architecture design, solution ideation, documentation
+Microsoft Phi-4	Core AI functionality within the application
+Azure Speech-to-Text	Audio evidence transcription
 All solution design, domain expertise, and architecture reflect human creativity and 19+ years of enterprise experience.
 ---
-👤 Author
-Siva Prasad Chilukuri
-Enterprise Solution Architect | 19+ Years | ISB Alumni
+👤 Team
+Name	Role
+Siva Prasad Chilukuri	Solution Architect · Developer · Domain Expert
+Background: 19+ years across enterprise software — PeopleSoft HCM/FSCM, Solution Architecture, Customer Success, Business Analysis. ISB Executive Management Program Alumni. Delivered enterprise solutions for Edelman, Honeywell, Cox Enterprises, Citibank, General Motors, FedEx.
+---
+📄 License
+MIT License — see LICENSE file for details.
 ---
 "We don't surveil people. We audit processes. Every cover-up leaves a data trail. We follow it."
